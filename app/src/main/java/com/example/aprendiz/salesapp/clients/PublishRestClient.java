@@ -1,4 +1,4 @@
-package com.example.aprendiz.clasefinal.clients;
+package com.example.aprendiz.salesapp.clients;
 
 
 

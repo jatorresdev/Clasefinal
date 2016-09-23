@@ -12,8 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.aprendiz.clasefinal.R;
-import com.example.aprendiz.clasefinal.models.Correo;
+import com.example.aprendiz.salesapp.R;
+import com.example.aprendiz.salesapp.models.Correo;
 
 /**
  * A simple {@link Fragment} subclass.

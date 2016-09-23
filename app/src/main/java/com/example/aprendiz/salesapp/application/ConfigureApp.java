@@ -1,4 +1,4 @@
-package com.example.aprendiz.clasefinal.application;
+package com.example.aprendiz.salesapp.application;
 
 import android.app.Application;
 import android.text.TextUtils;

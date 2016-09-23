@@ -1,4 +1,4 @@
-package com.example.aprendiz.clasefinal;
+package com.example.aprendiz.salesapp;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
