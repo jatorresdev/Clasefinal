@@ -1,7 +1,10 @@
 package com.example.aprendiz.clasefinal;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,16 +20,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-/*
-Prueba
- */
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener , AddPublish.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        if (isOnline()) {
+            requestData("http://phplaravel-26935-58004-154595.cloudwaysapps.com/api/publication");
+        } else {
+            Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -68,12 +83,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -128,12 +139,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    /**
-     * A simple {@link Fragment} subclass.
-     * Activities that contain this fragment must implement the
-     * {@link OnFragmentInteractionListener} interface
-     * to handle interaction events.
-     */
+
     public static class fragment_list extends Fragment {
 
         private OnFragmentInteractionListener mListener;
@@ -174,21 +180,66 @@ public class MainActivity extends AppCompatActivity
             mListener = null;
         }
 
-        //Comentario de prueba viernes 23 de septiembre de 2016
-
-        /**
-         * This interface must be implemented by activities that contain this
-         * fragment to allow an interaction in this fragment to be communicated
-         * to the activity and potentially other fragments contained in that
-         * activity.
-         * <p/>
-         * See the Android Training lesson <a href=
-         * "http://developer.android.com/training/basics/fragments/communicating.html"
-         * >Communicating with Other Fragments</a> for more information.
-         */
         public interface OnFragmentInteractionListener {
             // TODO: Update argument type and name
             void onFragmentInteraction(Uri uri);
         }
     }
+
+
+
+
+    /*-------------------------*/
+    List<MyTask> tasks;
+    TextView output;
+
+    private void requestData(String uri) {
+
+        MyTask task = new MyTask();
+        task.execute(uri);
+    }
+
+    protected void updateDisplay(String result) {
+        output.append(result + "\n");
+    }
+
+    protected boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private class MyTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String content = Publish.getPublish(params[0]);
+            try {
+                JSONObject jsonObject = new JSONObject(content.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return content;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+
+        }
+
+    }
+
+
+
 }
