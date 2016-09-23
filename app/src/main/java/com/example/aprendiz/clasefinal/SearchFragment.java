@@ -44,9 +44,7 @@ public class SearchFragment extends Fragment {
     private ListView publishList;
     ArrayList<Publish> noteArray;
 
-
-
-
+    /*prueba comentario¨*/
     private void getPublish() {
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
