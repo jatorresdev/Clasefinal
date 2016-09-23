@@ -18,7 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 /*
-Prueba 2
+Prueba 2 de comentario
  */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener , AddPublish.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
