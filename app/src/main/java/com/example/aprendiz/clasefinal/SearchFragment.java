@@ -13,9 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.aprendiz.clasefinal.adapters.*;
-import com.example.aprendiz.clasefinal.clients.PublishRestClient;
-import com.example.aprendiz.clasefinal.models.Publish;
+import com.example.aprendiz.salesapp.R;
+import com.example.aprendiz.salesapp.adapters.*;
+import com.example.aprendiz.salesapp.clients.PublishRestClient;
+import com.example.aprendiz.salesapp.models.Publish;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
