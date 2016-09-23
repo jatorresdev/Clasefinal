@@ -1,4 +1,4 @@
-package com.example.aprendiz.clasefinal;
+package com.example.aprendiz.salesapp;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

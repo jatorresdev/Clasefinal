@@ -1,4 +1,4 @@
-package com.example.aprendiz.clasefinal.models;
+package com.example.aprendiz.salesapp.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package com.example.aprendiz.clasefinal.adapters;
+package com.example.aprendiz.salesapp.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.aprendiz.clasefinal.R;
-import com.example.aprendiz.clasefinal.models.Publish;
+import com.example.aprendiz.salesapp.R;
+import com.example.aprendiz.salesapp.models.Publish;
 
 import java.util.List;
 

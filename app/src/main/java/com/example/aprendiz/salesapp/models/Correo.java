@@ -1,4 +1,4 @@
-package com.example.aprendiz.clasefinal.models;
+package com.example.aprendiz.salesapp.models;
 
 /**
  * Created by APRENDIZ on 22/09/2016.
