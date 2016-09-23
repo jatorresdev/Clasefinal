@@ -18,6 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
+
+/*  Comentario Actividad */
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener , AddPublish.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
 
