@@ -17,7 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-
+/*
+Prueba
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener , AddPublish.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
 
@@ -173,6 +175,8 @@ public class MainActivity extends AppCompatActivity
             super.onDetach();
             mListener = null;
         }
+
+        //Comentario de prueba viernes 23 de septiembre de 2016
 
         /**
          * This interface must be implemented by activities that contain this
