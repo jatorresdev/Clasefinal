@@ -5,25 +5,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.example.aprendiz.salesapp.adapters.*;
 import com.example.aprendiz.salesapp.clients.PublishRestClient;
 import com.example.aprendiz.salesapp.models.Publish;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
 
@@ -48,31 +42,31 @@ public class SearchFragment extends Fragment {
 
 
     private void getPublish() {
-        List<Header> headers = new ArrayList<Header>();
-        headers.add(new BasicHeader("Accept", "application/json"));
-        PublishRestClient.get(SearchFragment.this, "api/notes", headers.toArray(new Header[headers.size()]),
-                null, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        ArrayList<Publish> noteArray = new ArrayList<Publish>();
-
-
-                        PublishAdapter noteAdapter= new PublishAdapter(SearchFragment.this, noteArray);
-
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                noteAdapter.add(new Publish(response.getJSONObject(i)));
-
-                                System.out.println("johan" + response.getJSONObject(i).toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        publishList = (ListView)getView().findViewById(R.id.list_publish);
-                        publishList.setAdapter(noteAdapter);
-                    }
-                });
+//        List<Header> headers = new ArrayList<Header>();
+//        headers.add(new BasicHeader("Accept", "application/json"));
+//        PublishRestClient.get(SearchFragment.this, "api/notes", headers.toArray(new Header[headers.size()]),
+//                null, new JsonHttpResponseHandler() {
+//                    @Override
+//                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                        ArrayList<Publish> noteArray = new ArrayList<Publish>();
+//
+//
+//                        PublishAdapter noteAdapter= new PublishAdapter(SearchFragment.this, noteArray);
+//
+//                        for (int i = 0; i < response.length(); i++) {
+//                            try {
+//                                noteAdapter.add(new Publish(response.getJSONObject(i)));
+//
+//                                System.out.println("johan" + response.getJSONObject(i).toString());
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        publishList = (ListView)getView().findViewById(R.id.list_publish);
+//                        publishList.setAdapter(noteAdapter);
+//                    }
+//                });
     }
 
     @Override
