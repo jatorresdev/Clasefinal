@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -110,10 +109,16 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            clearFields();
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.loginUser();
         }
+    }
+
+    private void clearFields() {
+        mEmailView.setText("");
+        mPasswordView.setText("");
     }
 
     private boolean isEmailValid(String email) {
@@ -163,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
+     * Represents an asynchronous login task used to authenticate
      * the user.
      */
     public class UserLoginTask {
