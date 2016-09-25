@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +17,11 @@ import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.User;
 import com.example.aprendiz.salesapp.models.UserData;
 import com.example.aprendiz.salesapp.services.UserService;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -153,7 +158,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user register attempt.
-            clearFields();
+            //clearFields();
             showProgress(true);
             mRegisterTask = new UserRegisterTask(name, lastName, cellphone, telephone, email, password);
             mRegisterTask.registerUser();
@@ -251,24 +256,39 @@ public class RegisterUserActivity extends AppCompatActivity {
             User user = new User(mName, mLastName, mEmail, mCellphone, mTelephone, null, mPassword);
 
             UserService userRegisterService = SalesAPI.createService(UserService.class);
-            Call<UserData> callRegisterUser = userRegisterService.createUser(user);
-            callRegisterUser.enqueue(new Callback<UserData>() {
+            Call<ResponseBody> callRegisterUser = userRegisterService.createUser(user);
+            callRegisterUser.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<UserData> call, Response<UserData> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    int code = response.code();
                     showProgress(false);
-                    if (response.isSuccessful()) {
-                        User userResponse = response.body().getData();
+                    if (code == 200) {
+                        Gson gson = new Gson();
 
-                        Toast.makeText(RegisterUserActivity.this, "Usuario registrado exitosamente! " + userResponse.getFullName(), Toast.LENGTH_LONG).show();
+                        try {
+                            UserData userDataResponse = gson.fromJson(response.body().string(), UserData.class);
+                            Toast.makeText(RegisterUserActivity.this, "Usuario registrado exitosamente! "
+                                    + userDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
 
+                        } catch (IOException e) {
+                            Toast.makeText(RegisterUserActivity.this, "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                        }
+                    } else if (code == 500) {
+                        try {
+                            Log.d("Error", response.errorBody().string());
+                            Toast.makeText(RegisterUserActivity.this, "El correo ingresado ya ha sido registrado", Toast.LENGTH_LONG).show();
+
+                        } catch (IOException e) {
+                            Toast.makeText(RegisterUserActivity.this, "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         mRegisterTask = null;
-                        Toast.makeText(RegisterUserActivity.this, "El correo ingresado ya esta en uso", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterUserActivity.this, "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<UserData> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     mRegisterTask = null;
                     showProgress(false);
 

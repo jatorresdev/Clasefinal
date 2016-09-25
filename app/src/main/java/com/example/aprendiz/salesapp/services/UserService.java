@@ -21,7 +21,7 @@ public interface UserService {
 
 
     @POST("/api/user")
-    Call<UserData> createUser(@Body User user);
+    Call<ResponseBody> createUser(@Body User user);
 
     @PUT("/api/user")
     Call<ResponseBody> updateUser(@Body User user);
