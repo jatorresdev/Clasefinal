@@ -30,7 +30,4 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
     compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
-    // Analizar
-    compile 'com.loopj.android:android-async-http:1.4.9'
-
 }
