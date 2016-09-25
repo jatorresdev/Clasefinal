@@ -1,5 +1,6 @@
 package com.example.aprendiz.salesapp.models;
 
+import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -28,6 +29,10 @@ public class User {
         this.telephone = telephone;
         this.photo = photo;
         this.password = password;
+    }
+
+    public String getFullName() {
+        return this.name + " " + this.lastName;
     }
 
 
