@@ -1,5 +1,7 @@
 package com.example.aprendiz.salesapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
@@ -11,8 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, RegisterUserFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,20 +73,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-
         boolean FragmentTransaction = false;
         Fragment fragment = null;
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_sign_in) {
+//            Intent intentSignIn = new Intent(this, RegisterUserActivity.class);
+//            startActivity(intentSignIn);
+
+            fragment = new RegisterUserFragment();
+            FragmentTransaction = true;
+
             //fragment = new AddPublish();
-
-
             //FragmentTransaction = true;
 
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_sign_up) {
             //fragment = new SearchFragment();
 
 
@@ -98,12 +105,16 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
             item.setChecked(true);
             getSupportActionBar().setTitle(item.getTitle());
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

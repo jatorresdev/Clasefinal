@@ -34,6 +34,10 @@
     <string name="register.error_invalid_password">Contraseña invalido</string>
     <string name="register.error_field_required">Campo requerido</string>
 
+    <!--Navegación-->
+    <string name="nav.sign_in">Iniciar sesión</string>
+    <string name="nav.sign_up">registrarse</string>
+
     <!-- Codigo a eliminar -->
 
     <!-- TODO: Remove or change this placeholder text -->
