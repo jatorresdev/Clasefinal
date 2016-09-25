@@ -1,6 +1,5 @@
 package com.example.aprendiz.salesapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,16 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.aprendiz.salesapp.clients.PublishRestClient;
-import com.example.aprendiz.salesapp.models.Publish;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import java.util.ArrayList;
-import java.util.List;
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.message.BasicHeader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +26,7 @@ public class SearchFragment extends Fragment {
     }
 
     private ListView publishList;
-    ArrayList<Publish> noteArray;
+    //ArrayList<Publish> noteArray;
 
 
 

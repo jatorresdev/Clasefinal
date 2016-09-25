@@ -76,17 +76,17 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            fragment = new AddPublish();
+            //fragment = new AddPublish();
 
 
-            FragmentTransaction = true;
+            //FragmentTransaction = true;
 
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            fragment = new SearchFragment();
+            //fragment = new SearchFragment();
 
 
-            FragmentTransaction = true;
+            //FragmentTransaction = true;
 
         } else if (id == R.id.nav_share) {
 
