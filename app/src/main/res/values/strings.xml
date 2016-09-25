@@ -7,15 +7,32 @@
 
     <!-- Strings related to login -->
     <string name="login.title_activity_login">Inciar sesión</string>
-    <string name="login.prompt_email">Correo electronico</string>
+    <string name="login.prompt_email">Correo eletrónico</string>
     <string name="login.prompt_password">Contraseña</string>
     <string name="login.action_sign_in">Iniciar sesión</string>
-    <string name="login.action_register">Iniciar sesión</string>
-    <string name="login.error_invalid_email">Correo electronico invalido</string>
+    <string name="login.action_sign_up">Registrarse</string>
+    <string name="login.error_invalid_email">Correo eletrónico invalido</string>
     <string name="login.error_invalid_password">Contraseña invalida</string>
     <string name="login.error_incorrect_password">Contraseã incorrecta</string>
     <string name="login.error_field_required">Campo requerido</string>
 
+    <!-- Strings related to register user -->
+    <string name="register.title_activity_register_user">Registrarse</string>
+    <string name="register.prompt_name">Nombres</string>
+    <string name="register.prompt_last_name">Apellidos</string>
+    <string name="register.prompt_email">Correo eletrónico</string>
+    <string name="register.prompt_cellphone">Celular</string>
+    <string name="register.prompt_telephone">Teléfono</string>
+    <string name="register.prompt_password">Contraseña</string>
+    <string name="register.action_sign_up">Registrarse</string>
+
+    <string name="register.error_invalid_name">Nombres invalidos</string>
+    <string name="register.error_invalid_last_name">Apellidos invalidos</string>
+    <string name="register.error_invalid_cellphone">Celular invalido</string>
+    <string name="register.error_invalid_telephone">Teléfono invalido</string>
+    <string name="register.error_invalid_email">Correo eletrónico invalido</string>
+    <string name="register.error_invalid_password">Contraseña invalido</string>
+    <string name="register.error_field_required">Campo requerido</string>
 
     <!-- Codigo a eliminar -->
 
