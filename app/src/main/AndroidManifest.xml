@@ -31,10 +31,6 @@
             android:name=".LoginActivity"
             android:label="@string/login.title_activity_login"
             android:parentActivityName=".MainActivity"></activity>
-        <activity
-            android:name=".RegisterUserActivity"
-            android:label="@string/register.title_activity_register_user"
-            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>
