@@ -13,10 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.aprendiz.salesapp.fragments.LoginFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, RegisterUserFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        RegisterUserFragment.OnFragmentInteractionListener,
+        LoginFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,21 +82,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_sign_in) {
-//            Intent intentSignIn = new Intent(this, RegisterUserActivity.class);
-//            startActivity(intentSignIn);
-
-            fragment = new RegisterUserFragment();
+            fragment = new LoginFragment();
             FragmentTransaction = true;
 
-            //fragment = new AddPublish();
-            //FragmentTransaction = true;
-
-            // Handle the camera action
         } else if (id == R.id.nav_sign_up) {
-            //fragment = new SearchFragment();
-
-
-            //FragmentTransaction = true;
+            fragment = new RegisterUserFragment();
+            FragmentTransaction = true;
 
         } else if (id == R.id.nav_share) {
 
