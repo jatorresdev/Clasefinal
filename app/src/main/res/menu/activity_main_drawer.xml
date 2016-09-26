@@ -13,12 +13,12 @@
 
     </group>
 
-    <item android:title="Redes Sociales">
+    <item android:title="@string/nav.publication_title">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_publications"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Publicar" />
+                android:title="@string/nav.publication_list" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"

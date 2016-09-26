@@ -14,12 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.aprendiz.salesapp.fragments.LoginFragment;
+import com.example.aprendiz.salesapp.fragments.PublicationFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
+import com.example.aprendiz.salesapp.models.Publication;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         RegisterUserFragment.OnFragmentInteractionListener,
-        LoginFragment.OnFragmentInteractionListener {
+        LoginFragment.OnFragmentInteractionListener,
+        PublicationFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +92,9 @@ public class MainActivity extends AppCompatActivity
             fragment = new RegisterUserFragment();
             FragmentTransaction = true;
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_publications) {
+            fragment = new PublicationFragment();
+            FragmentTransaction = true;
 
         } else if (id == R.id.nav_send) {
 
@@ -109,6 +114,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(Publication item) {
 
     }
 }
