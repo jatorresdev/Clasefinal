@@ -11,6 +11,6 @@ public class UserData {
     }
 
     public void setData(User user) {
-        this.data = data;
+        this.data = user;
     }
 }

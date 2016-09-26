@@ -34,16 +34,4 @@ public class User {
     public String getFullName() {
         return this.name + " " + this.lastName;
     }
-
-
-    @Override
-    public String toString() {
-        return (id + "\n" +
-                name + "\n" +
-                lastName + "\n" +
-                email + "\n" +
-                cellphone + "\n" +
-                telephone + "\n" +
-                photo);
-    }
 }

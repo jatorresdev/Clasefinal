@@ -13,11 +13,11 @@
     <string name="login.action_sign_up">Registrarse</string>
     <string name="login.error_invalid_email">Correo eletrónico invalido</string>
     <string name="login.error_invalid_password">Contraseña invalida</string>
-    <string name="login.error_incorrect_password">Contraseã incorrecta</string>
+    <string name="login.error_incorrect_password">Contraseña incorrecta</string>
     <string name="login.error_field_required">Campo requerido</string>
 
     <!-- Strings related to register user -->
-    <string name="register.title_activity_register_user">Registrarse</string>
+    <string name="register.title_activity_register_user">Crear cuenta</string>
     <string name="register.prompt_name">Nombres</string>
     <string name="register.prompt_last_name">Apellidos</string>
     <string name="register.prompt_email">Correo eletrónico</string>
@@ -36,7 +36,7 @@
 
     <!--Navegación-->
     <string name="nav.sign_in">Iniciar sesión</string>
-    <string name="nav.sign_up">registrarse</string>
+    <string name="nav.sign_up">Crear cuenta</string>
 
     <!-- Codigo a eliminar -->
 
