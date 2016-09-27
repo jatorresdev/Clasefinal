@@ -18,6 +18,7 @@ import com.example.aprendiz.salesapp.fragments.LoginFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationCreate;
 import com.example.aprendiz.salesapp.fragments.PublicationFragment;
 //import com.example.aprendiz.salesapp.fragments.RegisterCommentaryFragment;
+import com.example.aprendiz.salesapp.fragments.RegisterCommentaryFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
 import com.example.aprendiz.salesapp.models.Publication;
 import com.example.aprendiz.salesapp.utils.PrefUtils;
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity
         RegisterUserFragment.OnFragmentInteractionListener,
         LoginFragment.OnFragmentInteractionListener,
         PublicationFragment.OnListFragmentInteractionListener,
-        PublicationCreate.OnFragmentInteractionListener {
+        PublicationCreate.OnFragmentInteractionListener,
+        RegisterCommentaryFragment.OnFragmentInteractionListener{
 
     public String loggedInUserEmail;
     public String loggedInUserPassword;
@@ -125,8 +127,8 @@ public class MainActivity extends AppCompatActivity
             fragment = new PublicationCreate();
             FragmentTransaction = true;
         } else if (id == R.id.nav_commentary_create) {
-            //fragment = new RegisterCommentaryFragment();
-            //FragmentTransaction = true;
+            fragment = new RegisterCommentaryFragment();
+            FragmentTransaction = true;
         }
 
         if (FragmentTransaction) {
