@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 public class PrefUtils {
     public static final String PREFS_LOGIN_EMAIL_KEY = "__EMAIL__";
     public static final String PREFS_LOGIN_PASSWORD_KEY = "__PASSWORD__";
+    public static final String PREFS_USER_KEY = "__USER__";
 
     /**
      * Called to save supplied value in shared preferences against given key.
@@ -43,5 +44,4 @@ public class PrefUtils {
             return defaultValue;
         }
     }
-
 }

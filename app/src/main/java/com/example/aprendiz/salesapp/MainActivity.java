@@ -115,8 +115,10 @@ public class MainActivity extends AppCompatActivity
             fragment = new PublicationFragment();
             FragmentTransaction = true;
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_account_logout) {
+            PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
+            PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
+            loadActivity();
         }
 
         if (FragmentTransaction) {

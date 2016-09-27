@@ -26,6 +26,7 @@ import com.example.aprendiz.salesapp.models.User;
 import com.example.aprendiz.salesapp.models.UserData;
 import com.example.aprendiz.salesapp.services.UserService;
 import com.example.aprendiz.salesapp.utils.PrefUtils;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -292,9 +293,12 @@ public class LoginFragment extends Fragment {
                     showProgress(false);
                     if (response.isSuccessful()) {
                         User user = response.body().getData();
+                        Gson gson = new Gson();
+                        String userJson = gson.toJson(user);
 
                         PrefUtils.saveToPrefs(getActivity(), PrefUtils.PREFS_LOGIN_EMAIL_KEY, mEmail);
                         PrefUtils.saveToPrefs(getActivity(), PrefUtils.PREFS_LOGIN_PASSWORD_KEY, mPassword);
+                        PrefUtils.saveToPrefs(getActivity(), PrefUtils.PREFS_USER_KEY, userJson);
 
                         ((MainActivity)getActivity()).loadActivity();
 
