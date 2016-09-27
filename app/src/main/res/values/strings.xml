@@ -41,7 +41,8 @@
     <string name="nav.account">Actualizar datos</string>
     <string name="nav.publication_title">Publicaciones</string>
     <string name="nav.publication_list">Lista</string>
-
+    <string name="nav.publication_create">Crear Publicacion</string>
+    <string name="nav.publication_addCommentary">Agregar Comentario</string>
     <!-- Codigo a eliminar -->
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -53,4 +54,21 @@
 
     <string name="label_note_id">Note Id</string>
     <string name="label_note_title">Note Title</string>
+
+    <!--Registro de comentarios-->
+
+    <string name="register_commentary_idPublication">Id Publicacion</string>
+    <string name="register_commentary_message">Texto Comentario</string>
+    <string name="register.action_commentary">Registrar Comentario</string>
+
+    <!--Errores en Registro de comentarios-->
+
+    <string name="register.error_invalid_idPublication">Nombres invalidos</string>
+    <string name="register.error_invalid_mesage">Apellidos invalidos</string>
+
+    <string name="register.error_field_required_idPublication">Campo requerido</string>
+    <string name="register.error_field_required_message">Campo requerido</string>
+
+    <!--//////////////////////////////////////////////////////////-->
+
 </resources>

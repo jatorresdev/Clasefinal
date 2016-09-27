@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.aprendiz.salesapp.fragments.LoginFragment;
+import com.example.aprendiz.salesapp.fragments.PublicationCreate;
 import com.example.aprendiz.salesapp.fragments.PublicationFragment;
+import com.example.aprendiz.salesapp.fragments.RegisterCommentaryFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
 import com.example.aprendiz.salesapp.models.Publication;
 import com.example.aprendiz.salesapp.utils.PrefUtils;
@@ -25,7 +27,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         RegisterUserFragment.OnFragmentInteractionListener,
         LoginFragment.OnFragmentInteractionListener,
-        PublicationFragment.OnListFragmentInteractionListener {
+        PublicationFragment.OnListFragmentInteractionListener,
+        PublicationCreate.OnFragmentInteractionListener,
+        RegisterCommentaryFragment.OnFragmentInteractionListener{
 
     public String loggedInUserEmail;
     public String loggedInUserPassword;
@@ -119,7 +123,13 @@ public class MainActivity extends AppCompatActivity
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
             loadActivity();
-        }
+        } else if(id == R.id.nav_publications_create){
+            fragment = new PublicationCreate();
+            FragmentTransaction = true;
+        } else if(id == R.id.nav_commentary_create){
+        fragment = new RegisterCommentaryFragment();
+        FragmentTransaction = true;
+    }
 
         if (FragmentTransaction) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
