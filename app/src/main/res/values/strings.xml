@@ -38,7 +38,7 @@
     <!--Navegación-->
     <string name="nav.account_title">Cuenta</string>
     <string name="nav.logout">Cerra sesión</string>
-    <string name="nav.account">Actualizar información</string>
+    <string name="nav.account">Actualizar datos</string>
     <string name="nav.publication_title">Publicaciones</string>
     <string name="nav.publication_list">Lista</string>
 

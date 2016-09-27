@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.aprendiz.salesapp.MainActivity;
 import com.example.aprendiz.salesapp.R;
 import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.User;
@@ -295,11 +296,7 @@ public class LoginFragment extends Fragment {
                         PrefUtils.saveToPrefs(getActivity(), PrefUtils.PREFS_LOGIN_EMAIL_KEY, mEmail);
                         PrefUtils.saveToPrefs(getActivity(), PrefUtils.PREFS_LOGIN_PASSWORD_KEY, mPassword);
 
-                        PublicationFragment publicationFragment = new PublicationFragment();
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.content_main, publicationFragment);
-                        fragmentTransaction.commit();
+                        ((MainActivity)getActivity()).loadActivity();
 
                         Toast.makeText(getActivity(), "Bienvenido " + user.getFullName(), Toast.LENGTH_LONG).show();
 

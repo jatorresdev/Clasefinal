@@ -35,18 +35,28 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadActivity();
+    }
+
+    public void loadActivity() {
+        Fragment fragment;
+
         loggedInUserEmail = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
         loggedInUserPassword = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
-        
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (loggedInUserEmail.equals("") || loggedInUserPassword.equals("")) {
-            Fragment fragment = new LoginFragment();
+            fragment = new LoginFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_main, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else {
+            fragment = new PublicationFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_main, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
