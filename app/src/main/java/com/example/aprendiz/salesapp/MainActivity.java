@@ -1,6 +1,5 @@
 package com.example.aprendiz.salesapp;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,6 +17,7 @@ import com.example.aprendiz.salesapp.fragments.LoginFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
 import com.example.aprendiz.salesapp.models.Publication;
+import com.example.aprendiz.salesapp.utils.PrefUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -24,11 +25,16 @@ public class MainActivity extends AppCompatActivity
         LoginFragment.OnFragmentInteractionListener,
         PublicationFragment.OnListFragmentInteractionListener {
 
+    public String loggedInUserEmail;
+    public String loggedInUserPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loggedInUserEmail = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
+        loggedInUserPassword = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -78,21 +85,14 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         boolean FragmentTransaction = false;
         Fragment fragment = null;
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_sign_in) {
-            fragment = new LoginFragment();
-            FragmentTransaction = true;
-
-        } else if (id == R.id.nav_sign_up) {
-            fragment = new RegisterUserFragment();
-            FragmentTransaction = true;
-
-        } else if (id == R.id.nav_publications) {
+        if (id == R.id.nav_publications) {
             fragment = new PublicationFragment();
             FragmentTransaction = true;
 
