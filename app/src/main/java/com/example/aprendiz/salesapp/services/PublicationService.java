@@ -1,6 +1,7 @@
 package com.example.aprendiz.salesapp.services;
 
 import com.example.aprendiz.salesapp.models.Publication;
+import com.example.aprendiz.salesapp.models.PublicationData;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -26,7 +27,7 @@ public interface PublicationService {
     Call<ResponseBody> getPublicationById(@Query("id") String id,@Query("comes") String comentario);
 
     @POST("/api/publication")
-    Call<ResponseBody> insertPublication(@Body Publication publication);
+    Call<PublicationData> insertPublication(@Body Publication publication);
 
     @PUT("/api/publication")
     Call<ResponseBody> updatePublication(@Body Publication publication);

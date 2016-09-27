@@ -28,12 +28,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Title"
-                    android:inputType="textPersonName"
+                    android:hint="@string/publication.title"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -43,12 +43,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/City"
-                    android:inputType="textPersonName"
+                    android:hint="@string/publication.city"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -58,14 +58,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/description"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:hint="@string/Description"
-                    android:inputType="textPersonName"
-                    android:maxLines="5"
-                    android:singleLine="true" />
+                    android:layout_height="fill_parent"
+                    android:hint="@string/publication.description"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:minHeight="30dp"
+                    android:layout_marginTop="0dp"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -75,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Publicar"
+                android:text="@string/publication.action_create"
                 android:textStyle="bold" />
 
         </LinearLayout>

@@ -18,16 +18,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.aprendiz.salesapp.MainActivity;
 import com.example.aprendiz.salesapp.R;
 import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.Publication;
-import com.example.aprendiz.salesapp.models.UserData;
+import com.example.aprendiz.salesapp.models.PublicationData;
 import com.example.aprendiz.salesapp.services.PublicationService;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -82,9 +79,9 @@ public class PublicationCreate extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mTitle = (EditText) view.findViewById(R.id.title);
         mCity = (EditText) view.findViewById(R.id.city);
-        mDescription = (EditText)view.findViewById(R.id.description);
+        mDescription = (EditText) view.findViewById(R.id.description);
         mPhoto = null;
-        Button btnCreatePublication = (Button)view.findViewById(R.id.btn_create_publication);
+        Button btnCreatePublication = (Button) view.findViewById(R.id.btn_create_publication);
         btnCreatePublication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +116,7 @@ public class PublicationCreate extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void createPublication(){
+    private void createPublication() {
         mTitle.setError(null);
         mCity.setError(null);
         mDescription.setError(null);
@@ -132,39 +129,35 @@ public class PublicationCreate extends Fragment {
         boolean cancel = false;
         View focusedView = null;
 
-        if (TextUtils.isEmpty(title)){
-            mTitle.setError("El titulo esta vacio");
+        if (TextUtils.isEmpty(title)) {
+            mTitle.setError(getString(R.string.publication_error_field_required));
             focusedView = mTitle;
             cancel = true;
-        }else{
-            cancel = false;
-        }
-        if (TextUtils.isEmpty(city)){
-            mTitle.setError("La ciudad esta vacia");
-            focusedView = mCity;
-            cancel = true;
-        }else{
-            cancel = false;
-        }
-        if (TextUtils.isEmpty(description)){
-            mTitle.setError("La descripcion esta vacia");
-            focusedView = mDescription;
-            cancel = true;
-        }else{
-            cancel = false;
         }
 
-        if(cancel){
+        if (TextUtils.isEmpty(city)) {
+            mCity.setError(getString(R.string.publication_error_field_required));
+            focusedView = mCity;
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(description)) {
+            mDescription.setError(getString(R.string.publication_error_field_required));
+            focusedView = mDescription;
+            cancel = true;
+        }
+
+        if (cancel) {
             focusedView.requestFocus();
-        }else{
+        } else {
             clearFields();
-            mCreatePublicationTask = new CreatePublicationTask(title,description,city,photo);
+            mCreatePublicationTask = new CreatePublicationTask(title, city, description, photo);
             mCreatePublicationTask.createPublication();
         }
     }
 
 
-    private void clearFields (){
+    private void clearFields() {
         mTitle.setText("");
         mCity.setText("");
         mDescription.setText("");
@@ -213,55 +206,40 @@ public class PublicationCreate extends Fragment {
         private final String mDescription;
         private final String mPhoto;
 
-        public CreatePublicationTask(String title, String city, String description,String photo) {
+        public CreatePublicationTask(String title, String city, String description, String photo) {
             mTitle = title;
             mCity = city;
             mDescription = description;
             mPhoto = photo;
-
         }
 
-        public void createPublication(){
-            Publication publication = new Publication(mTitle,mDescription,mCity,mPhoto,null);
+        public void createPublication() {
+            Publication publication = new Publication(mTitle, mDescription, mCity, mPhoto, null);
 
-            PublicationService publicationService = SalesAPI.createService(PublicationService.class,"bsmunoz5@misena.edu.co","11111");
-            Call<ResponseBody> callCreatePublication = publicationService.insertPublication(publication);
-            callCreatePublication.enqueue(new Callback<ResponseBody>() {
+            PublicationService publicationService = SalesAPI.createService(PublicationService.class,
+                    ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
+
+            Call<PublicationData> callCreatePublication = publicationService.insertPublication(publication);
+            callCreatePublication.enqueue(new Callback<PublicationData>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    int code = response.code();
+                public void onResponse(Call<PublicationData> call, Response<PublicationData> response) {
                     showProgress(false);
-                    if (code == 200) {
-                        Gson gson = new Gson();
 
-                        try {
-                            UserData userDataResponse = gson.fromJson(response.body().string(), UserData.class);
-                            Toast.makeText(getActivity(), "Publicacion guardada Exitosamente!"
-                                    + userDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
-
-                        } catch (IOException e) {
-                            Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar la publicacion", Toast.LENGTH_LONG).show();
-                        }
-                    } else if (code == 500) {
-                        try {
-                            Log.d("Error", response.errorBody().string());
-                            Toast.makeText(getActivity(), "El correo ingresado ya ha sido registrado", Toast.LENGTH_LONG).show();
-
-                        } catch (IOException e) {
-                            Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar la publicacion", Toast.LENGTH_LONG).show();
-                        }
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getActivity(), "Publicación creada "
+                                + response.body().getData().getTitle(), Toast.LENGTH_LONG).show();
                     } else {
                         mCreatePublicationTask = null;
-                        Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar la publicacion", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Ha ocurrido un error al intentar crear la publicación", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<PublicationData> call, Throwable t) {
                     mCreatePublicationTask = null;
                     showProgress(false);
 
-                    Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar la publicacion", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar la publicación", Toast.LENGTH_LONG).show();
                 }
             });
         }
