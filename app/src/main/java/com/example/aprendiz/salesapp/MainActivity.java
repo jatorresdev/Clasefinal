@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -35,19 +37,26 @@ public class MainActivity extends AppCompatActivity
 
         loggedInUserEmail = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
         loggedInUserPassword = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
-
+        
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        if (loggedInUserEmail.equals("") || loggedInUserPassword.equals("")) {
+            Fragment fragment = new LoginFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_main, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        } else {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+            navigationView.setNavigationItemSelectedListener(this);
+        }
     }
 
     @Override

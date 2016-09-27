@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item android:title="@string/nav.publication_title">
         <menu>
             <item
@@ -14,4 +13,16 @@
         </menu>
     </item>
 
+    <item android:title="@string/nav.account_title">
+        <menu>
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/nav.publication_list" />
+            <item
+                android:id="@+id/nav_account_logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/nav.logout" />
+        </menu>
+    </item>
 </menu>

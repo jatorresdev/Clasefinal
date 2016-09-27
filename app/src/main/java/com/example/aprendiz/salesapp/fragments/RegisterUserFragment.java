@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -114,6 +116,14 @@ public class RegisterUserFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 attemptRegister();
+            }
+        });
+
+        Button mSignInButton = (Button) view.findViewById(R.id.register_sign_in);
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goLogin();
             }
         });
 
@@ -257,6 +267,14 @@ public class RegisterUserFragment extends Fragment {
             mRegisterTask = new UserRegisterTask(name, lastName, cellphone, telephone, email, password);
             mRegisterTask.registerUser();
         }
+    }
+
+    private void goLogin() {
+        LoginFragment loginFragment = new LoginFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_main, loginFragment);
+        fragmentTransaction.commit();
     }
 
     private void clearFields() {

@@ -10,7 +10,7 @@
     <string name="login.prompt_email">Correo eletrónico</string>
     <string name="login.prompt_password">Contraseña</string>
     <string name="login.action_sign_in">Iniciar sesión</string>
-    <string name="login.action_sign_up">Registrarse</string>
+    <string name="login.action_sign_up">Crear cuenta</string>
     <string name="login.error_invalid_email">Correo eletrónico invalido</string>
     <string name="login.error_invalid_password">Contraseña invalida</string>
     <string name="login.error_incorrect_password">Contraseña incorrecta</string>
@@ -24,7 +24,8 @@
     <string name="register.prompt_cellphone">Celular</string>
     <string name="register.prompt_telephone">Teléfono</string>
     <string name="register.prompt_password">Contraseña</string>
-    <string name="register.action_sign_up">Registrarse</string>
+    <string name="register.action_sign_up">Crear cuenta</string>
+    <string name="register.action_sign_in">Iniciar sesión</string>
 
     <string name="register.error_invalid_name">Nombres invalidos</string>
     <string name="register.error_invalid_last_name">Apellidos invalidos</string>
@@ -35,8 +36,9 @@
     <string name="register.error_field_required">Campo requerido</string>
 
     <!--Navegación-->
-    <string name="nav.sign_in">Iniciar sesión</string>
-    <string name="nav.sign_up">Crear cuenta</string>
+    <string name="nav.account_title">Cuenta</string>
+    <string name="nav.logout">Cerra sesión</string>
+    <string name="nav.account">Actualizar información</string>
     <string name="nav.publication_title">Publicaciones</string>
     <string name="nav.publication_list">Lista</string>
 

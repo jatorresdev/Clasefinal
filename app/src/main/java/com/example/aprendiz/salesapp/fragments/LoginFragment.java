@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.User;
 import com.example.aprendiz.salesapp.models.UserData;
 import com.example.aprendiz.salesapp.services.UserService;
+import com.example.aprendiz.salesapp.utils.PrefUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,6 +99,14 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        Button mSignUpButton = (Button) view.findViewById(R.id.login_sign_up);
+        mSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goRegisterUser();
             }
         });
 
@@ -198,6 +209,14 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    private void goRegisterUser() {
+        RegisterUserFragment registerUserFragment = new RegisterUserFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_main, registerUserFragment);
+        fragmentTransaction.commit();
+    }
+
     private void clearFields() {
         mEmailView.setText("");
         mPasswordView.setText("");
@@ -272,6 +291,15 @@ public class LoginFragment extends Fragment {
                     showProgress(false);
                     if (response.isSuccessful()) {
                         User user = response.body().getData();
+
+                        PrefUtils.saveToPrefs(getActivity(), PrefUtils.PREFS_LOGIN_EMAIL_KEY, mEmail);
+                        PrefUtils.saveToPrefs(getActivity(), PrefUtils.PREFS_LOGIN_PASSWORD_KEY, mPassword);
+
+                        PublicationFragment publicationFragment = new PublicationFragment();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.content_main, publicationFragment);
+                        fragmentTransaction.commit();
 
                         Toast.makeText(getActivity(), "Bienvenido " + user.getFullName(), Toast.LENGTH_LONG).show();
 
