@@ -11,6 +11,10 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/nav.publication_create" />
             <item
+                android:id="@+id/nav_publications_update"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/nav.publication_update" />
+            <item
                 android:id="@+id/nav_commentary_create"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/nav.publication_addCommentary" />

@@ -57,13 +57,16 @@
     <string name="nav.publication_title">Publicaciones</string>
     <string name="nav.publication_list">Lista</string>
     <string name="nav.publication_create">Crear Publicacion</string>
+    <string name="nav.publication_update">Editar Publicacion</string>
     <string name="nav.publication_addCommentary">Agregar Comentario</string>
     <string name="nav.publication_updateCommentary">Editar Comentario</string>
     <!--Publicación-->
-    <string name="publication.title">Publicación</string>
+    <string name="publication.titleid">IdPublicacion</string>
+    <string name="publication.title">Titulo</string>
     <string name="publication.city">Ciudad</string>
     <string name="publication.description">Descripción</string>
     <string name="publication.action_create">Publicar</string>
+    <string name="publication.action_update">Modificar</string>
     <string name="publication.error_field_required">Campo requerido</string>
 
     <!--Registro de comentarios-->
