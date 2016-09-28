@@ -19,7 +19,8 @@ public interface CommentaryService {
     @POST("/api/publication/{idPublication}/comment")
     Call<ResponseBody> createCommentary(@Path("idPublication") String idPublication, @Field("message") String message);
 
-    @PUT("/api/publication/idPublication/comment/idComentario")
-    Call<ResponseBody> updateCommentary(@Body Commentary commentary);
+    @FormUrlEncoded
+    @PUT("/api/publication/{idPublication}/comment/{idComentario}")
+    Call<ResponseBody> updateCommentary(@Path("idPublication") String idPublication,@Field("message") String message,@Path("idComentario") String idComentario);
 
 }

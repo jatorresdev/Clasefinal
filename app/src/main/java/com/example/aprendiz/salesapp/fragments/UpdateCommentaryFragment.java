@@ -33,22 +33,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link RegisterCommentaryFragment.OnFragmentInteractionListener} interface
+ * {@link UpdateCommentaryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link RegisterCommentaryFragment#//newInstance} factory method to
+ * Use the {@link UpdateCommentaryFragment#//newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RegisterCommentaryFragment extends Fragment {
+public class UpdateCommentaryFragment extends Fragment {
 
-    private CommentaryRegisterTask mRegisterTask = null;
+    private CommentaryUpdateTask mRegisterTask = null;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
+   // private static final String ARG_PARAM1 = "param1";
     //private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
@@ -56,19 +55,18 @@ public class RegisterCommentaryFragment extends Fragment {
     //private String mParam2;
 
     private EditText EtIdPublication;
+    private EditText EtIdCommentary;
     private EditText EtCommentaryMessage;
 
     private View mProgressView;
     private View mRegisterFormView;
 
+
     private OnFragmentInteractionListener mListener;
 
-    public RegisterCommentaryFragment() {
+    public UpdateCommentaryFragment() {
         // Required empty public constructor
     }
-
-/*
-Es para agregar comentarios se debe relacionar el id de la publicacion*/
 
     /**
      * Use this factory method to create a new instance of
@@ -76,11 +74,11 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
      *
      * @param //param1 Parameter 1.
      * @param //param2 Parameter 2.
-     * @return A new instance of fragment RegisterCommentaryFragment.
+     * @return A new instance of fragment UpdateCommentaryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    /*public static RegisterCommentaryFragment newInstance(String param1, String param2) {
-        RegisterCommentaryFragment fragment = new RegisterCommentaryFragment();
+    /*public static UpdateCommentaryFragment newInstance(String param1, String param2) {
+        UpdateCommentaryFragment fragment = new UpdateCommentaryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -92,7 +90,7 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Log", "onCreate");
-        /*if (getArguments() != null) {
+      /*  if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }*/
@@ -103,20 +101,26 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
                              Bundle savedInstanceState) {
         Log.d("Log", "onCreateView");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register_commentary, container, false);
+        return inflater.inflate(R.layout.fragment_update_commentary, container, false);
+    }
 
-
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-      EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
-        EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryMesage);
-        Button btnComentar=(Button)view.findViewById(R.id.registerCommentary);
+       EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
+         EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
+         EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryEtMesage);
+        Button btnEditarComentar=(Button)view.findViewById(R.id.updateCommentary);
 
-        btnComentar.setOnClickListener(new View.OnClickListener() {
+        btnEditarComentar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attemptRegister();
@@ -125,14 +129,6 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
 
         mRegisterFormView = view.findViewById(R.id.register_user_form);
         mProgressView = view.findViewById(R.id.register_progress);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-
-        }
     }
 
     @Override
@@ -157,7 +153,7 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -167,15 +163,13 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
         void onFragmentInteraction(Uri uri);
     }
 
-
-    /*Logica del registro*/
-
     private void attemptRegister(){
         EtIdPublication.setError(null);
+        EtIdCommentary.setError(null);
         EtCommentaryMessage.setError(null);
 
-
         String idPublication= EtIdPublication.getText().toString();
+        String idCommentary=EtIdCommentary.getText().toString();
         String message=EtCommentaryMessage.getText().toString();
 
         boolean cancel = false;
@@ -185,22 +179,20 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
             EtIdPublication.setError(getString(R.string.register_error_field_required));
             focusView = EtIdPublication;
             cancel = true;
-        } /*else if (!isNameValid(idPublication)) {
-            EtIdPublication.setError(getString(R.string.register_error_invalid_name));
-            focusView = EtIdPublication;
-            cancel = true;
-        }*/
+        }
 
         if (TextUtils.isEmpty(message)) {
             EtCommentaryMessage.setError(getString(R.string.register_error_field_required));
             focusView = EtCommentaryMessage;
             cancel = true;
         }
-        /*else if (!isNameValid(message)) {
-            EtCommentaryMessage.setError(getString(R.string.register_error_invalid_name));
-            focusView = EtCommentaryMessage;
+
+        if (TextUtils.isEmpty(idCommentary)) {
+            EtIdCommentary.setError(getString(R.string.register_error_field_required));
+            focusView = EtIdCommentary;
             cancel = true;
-        }*/
+        }
+
 
 
         if (cancel) {
@@ -212,8 +204,8 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
             // perform the user register attempt.
             clearFields();
             showProgress(true);
-            mRegisterTask = new CommentaryRegisterTask(idPublication,message);
-            mRegisterTask.registerCommentary();
+            mRegisterTask = new CommentaryUpdateTask(idPublication,message,idCommentary);
+            mRegisterTask.updateCommentary();
         }
 
 
@@ -222,7 +214,7 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
     private void clearFields() {
         EtIdPublication.setText("");
         EtCommentaryMessage.setText("");
-
+        EtIdCommentary.setText("");
     }
 
     private boolean isNameValid(String name) {
@@ -278,64 +270,65 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
         }
     }
 
-    public class CommentaryRegisterTask {
+    public class CommentaryUpdateTask {
 
 
         private final String mIdPublication;
+        private final String mIdCommentary;
         private final String mMessage;
 
-        public CommentaryRegisterTask(String mIdPublication,String mMessage) {
+        public CommentaryUpdateTask(String mIdPublication,String mMessage, String mIdCommentary) {
             this.mIdPublication = mIdPublication;
+            this.mIdCommentary = mIdCommentary;
             this.mMessage = mMessage;
         }
 
+        public void updateCommentary() {
+        Commentary commentary = new Commentary(mIdPublication,mMessage,mIdCommentary);
 
-        public void registerCommentary() {
-            Commentary commentary = new Commentary(mIdPublication,mMessage);
 
+        CommentaryService commentaryServices = SalesAPI.createService(CommentaryService.class,
+                ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
+        Call<ResponseBody> callUpdateCommentary = commentaryServices.updateCommentary(mIdPublication,mMessage,mIdCommentary);
+            callUpdateCommentary.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                int code = response.code();
+                showProgress(false);
+                if (code == 200) {
+                    Gson gson = new Gson();
 
-            CommentaryService commentaryServices = SalesAPI.createService(CommentaryService.class,
-                    ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
-            Call<ResponseBody> callCreateCommentary = commentaryServices.createCommentary(mIdPublication,mMessage);
-            callCreateCommentary.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    int code = response.code();
-                    showProgress(false);
-                    if (code == 200) {
-                        Gson gson = new Gson();
+                    try {
+                        CommentaryData commentaryDataResponse = gson.fromJson(response.body().string(), CommentaryData.class);
+                        Toast.makeText(getActivity(), "Comentario editado exitosamente! "
+                                + commentaryDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
 
-                        try {
-                            CommentaryData commentaryDataResponse = gson.fromJson(response.body().string(), CommentaryData.class);
-                            Toast.makeText(getActivity(), "Comentario registrado exitosamente! "
-                                    + commentaryDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
-
-                        } catch (IOException e) {
-                            Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
-                        }
-                    } else if (code == 500) {
-                        try {
-                            Log.d("Error", response.errorBody().string());
-                            Toast.makeText(getActivity(), "El correo ingresado ya ha sido registrado", Toast.LENGTH_LONG).show();
-
-                        } catch (IOException e) {
-                            Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        mRegisterTask = null;
+                    } catch (IOException e) {
                         Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                     }
-                }
+                } else if (code == 500) {
+                    try {
+                        Log.d("Error", response.errorBody().string());
+                        Toast.makeText(getActivity(), "El correo ingresado ya ha sido registrado", Toast.LENGTH_LONG).show();
 
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    } catch (IOException e) {
+                        Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                    }
+                } else {
                     mRegisterTask = null;
-                    showProgress(false);
-
                     Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                 }
+            }
 
-            });
-        }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mRegisterTask = null;
+                showProgress(false);
+
+                Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+            }
+
+        });
     }
+}
 }

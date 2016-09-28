@@ -58,7 +58,7 @@
     <string name="nav.publication_list">Lista</string>
     <string name="nav.publication_create">Crear Publicacion</string>
     <string name="nav.publication_addCommentary">Agregar Comentario</string>
-
+    <string name="nav.publication_updateCommentary">Editar Comentario</string>
     <!--Publicación-->
     <string name="publication.title">Publicación</string>
     <string name="publication.city">Ciudad</string>
@@ -71,6 +71,11 @@
     <string name="register_commentary_idPublication">Id Publicacion</string>
     <string name="register_commentary_message">Texto Comentario</string>
     <string name="register.action_commentary">Registrar Comentario</string>
+
+    <!--Modificar de comentarios-->
+
+    <string name="register_commentary_idCommentary">Id Comentario</string>
+    <string name="register.action_updateCommentary">Editar Comentario</string>
 
     <!--Errores en Registro de comentarios-->
 

@@ -11,13 +11,19 @@ public class Commentary {
     private int user_id;
 
 
-    /*public Commentary(String id, String message, String publication_id, int user_id) {
+  /* public Commentary(String id, String message, String publication_id, int user_id) {
         this.id = id;
         this.message = message;
         this.publication_id = publication_id;
         this.user_id = user_id;
     }*/
 
+    public Commentary(String publication_id, String message,String id ) {
+        this.id = id;
+        this.message = message;
+        this.publication_id = publication_id;
+
+    }
     public Commentary(String publication_id, String message) {
 
         this.message = message;
