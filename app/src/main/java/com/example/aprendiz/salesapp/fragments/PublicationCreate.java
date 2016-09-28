@@ -129,9 +129,9 @@ public class PublicationCreate extends Fragment {
         boolean cancel = false;
         View focusedView = null;
 
-        if (TextUtils.isEmpty(title)) {
-            mTitle.setError(getString(R.string.publication_error_field_required));
-            focusedView = mTitle;
+        if (TextUtils.isEmpty(description)) {
+            mDescription.setError(getString(R.string.publication_error_field_required));
+            focusedView = mDescription;
             cancel = true;
         }
 
@@ -141,9 +141,9 @@ public class PublicationCreate extends Fragment {
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(description)) {
-            mDescription.setError(getString(R.string.publication_error_field_required));
-            focusedView = mDescription;
+        if (TextUtils.isEmpty(title)) {
+            mTitle.setError(getString(R.string.publication_error_field_required));
+            focusedView = mTitle;
             cancel = true;
         }
 
