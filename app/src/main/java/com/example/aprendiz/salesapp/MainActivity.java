@@ -13,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.aprendiz.salesapp.fragments.LoginFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationCreate;
@@ -22,7 +25,10 @@ import com.example.aprendiz.salesapp.fragments.RegisterCommentaryFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
 import com.example.aprendiz.salesapp.fragments.UpdateUserFragment;
 import com.example.aprendiz.salesapp.models.Publication;
+import com.example.aprendiz.salesapp.models.User;
 import com.example.aprendiz.salesapp.utils.PrefUtils;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -36,6 +42,10 @@ public class MainActivity extends AppCompatActivity
     public String loggedInUserEmail;
     public String loggedInUserPassword;
     public String loggedInUserData;
+
+    ImageView mUserImage;
+    TextView mUserFullName;
+    TextView mUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +82,31 @@ public class MainActivity extends AppCompatActivity
             toggle.syncState();
 
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
             navigationView.setNavigationItemSelectedListener(this);
+
+            showUserHeader(navigationView);
+        }
+    }
+
+    public void showUserHeader(NavigationView navigationView) {
+        Gson gson = new Gson();
+        User user = gson.fromJson(loggedInUserData, User.class);
+
+        View headerLayout =
+                navigationView.inflateHeaderView(R.layout.nav_header_main);
+
+        mUserImage = (ImageView) headerLayout.findViewById(R.id.image_user);
+        mUserFullName = (TextView) headerLayout.findViewById(R.id.fullname_user);
+        mUserEmail = (TextView) headerLayout.findViewById(R.id.emai_user);
+
+        mUserFullName.setText(user.getFullName());
+        mUserEmail.setText(user.getEmail());
+
+        // Proceso carga imagen
+        if (!user.getPhoto().isEmpty()) {
+            Picasso.with(getApplication())
+                    .load(user.getPhoto())
+                    .into(mUserImage);
         }
     }
 
@@ -126,6 +159,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_account_logout) {
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
+            PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_USER_KEY, "");
             loadActivity();
 
         } else if (id == R.id.nav_account) {
