@@ -23,6 +23,7 @@ import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.User;
 import com.example.aprendiz.salesapp.models.UserData;
 import com.example.aprendiz.salesapp.services.UserService;
+import com.example.aprendiz.salesapp.utils.PrefUtils;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
@@ -47,7 +48,7 @@ public class UpdateUserFragment extends Fragment {
     private EditText mTelephoneView;
 
     private View mProgressView;
-    private View mRegisterFormView;
+    private View mUpdateFormView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -71,22 +72,30 @@ public class UpdateUserFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Gson gson = new Gson();
+        final User user = gson.fromJson(((MainActivity) getActivity()).loggedInUserData, User.class);
+
         // Set up the login form.
         mNameView = (EditText) view.findViewById(R.id.name);
         mLastNameView = (EditText) view.findViewById(R.id.last_name);
         mCellphoneView = (EditText) view.findViewById(R.id.cellphone);
         mTelephoneView = (EditText) view.findViewById(R.id.telephone);
 
+        mNameView.setText(user.getName());
+        mLastNameView.setText(user.getLastName());
+        mCellphoneView.setText(user.getCellphone());
+        mTelephoneView.setText(user.getTelephone());
+
         Button mSignUpButton = (Button) view.findViewById(R.id.update_user);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptUpdate();
+                attemptUpdate(user);
             }
         });
 
-        mRegisterFormView = view.findViewById(R.id.register_user_form);
-        mProgressView = view.findViewById(R.id.register_progress);
+        mUpdateFormView = view.findViewById(R.id.update_user_form);
+        mProgressView = view.findViewById(R.id.update_user_progress);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -131,7 +140,7 @@ public class UpdateUserFragment extends Fragment {
     /**
      * Logica de registro
      */
-    private void attemptUpdate() {
+    private void attemptUpdate(User user) {
         // Reset errors.
         mNameView.setError(null);
         mLastNameView.setError(null);
@@ -194,18 +203,10 @@ public class UpdateUserFragment extends Fragment {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user register attempt.
-            clearFields();
             showProgress(true);
             mUpdateTask = new UserUpdateTask(name, lastName, cellphone, telephone);
-            mUpdateTask.updateUser();
+            mUpdateTask.updateUser(user);
         }
-    }
-
-    private void clearFields() {
-        mNameView.setText("");
-        mLastNameView.setText("");
-        mCellphoneView.setText("");
-        mTelephoneView.setText("");
     }
 
     private boolean isNameValid(String name) {
@@ -231,12 +232,12 @@ public class UpdateUserFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
+            mUpdateFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mUpdateFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mUpdateFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -252,7 +253,7 @@ public class UpdateUserFragment extends Fragment {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mUpdateFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -274,16 +275,15 @@ public class UpdateUserFragment extends Fragment {
             mTelephone = telephone;
         }
 
-        public void updateUser() {
-            Gson gson = new Gson();
-            User user = gson.fromJson(((MainActivity) getActivity()).loggedInUserData, User.class);
-
+        public void updateUser(final User user) {
             user.setName(mName);
             user.setLastName(mLastName);
             user.setCellphone(mCellphone);
             user.setTelephone(mTelephone);
 
-            UserService userUpdateService = SalesAPI.createService(UserService.class);
+            UserService userUpdateService = SalesAPI.createService(UserService.class,
+                    ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
+
             Call<UserData> callRegisterUser = userUpdateService.updateUser(user);
             callRegisterUser.enqueue(new Callback<UserData>() {
                 @Override
@@ -291,6 +291,12 @@ public class UpdateUserFragment extends Fragment {
                     showProgress(false);
 
                     if (response.isSuccessful()) {
+                        User userUpdate = response.body().getData();
+
+                        Gson gson = new Gson();
+                        String userJson = gson.toJson(userUpdate);
+                        PrefUtils.saveToPrefs(getActivity(), PrefUtils.PREFS_USER_KEY, userJson);
+
                         ((MainActivity) getActivity()).loadActivity();
 
                         Toast.makeText(getActivity(), "Información actualizada exitosamente "
