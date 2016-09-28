@@ -20,19 +20,22 @@ import com.example.aprendiz.salesapp.fragments.PublicationFragment;
 //import com.example.aprendiz.salesapp.fragments.RegisterCommentaryFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterCommentaryFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
+import com.example.aprendiz.salesapp.fragments.UpdateUserFragment;
 import com.example.aprendiz.salesapp.models.Publication;
 import com.example.aprendiz.salesapp.utils.PrefUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         RegisterUserFragment.OnFragmentInteractionListener,
+        UpdateUserFragment.OnFragmentInteractionListener,
         LoginFragment.OnFragmentInteractionListener,
         PublicationFragment.OnListFragmentInteractionListener,
         PublicationCreate.OnFragmentInteractionListener,
-        RegisterCommentaryFragment.OnFragmentInteractionListener{
+        RegisterCommentaryFragment.OnFragmentInteractionListener {
 
     public String loggedInUserEmail;
     public String loggedInUserPassword;
+    public String loggedInUserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity
 
         loggedInUserEmail = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
         loggedInUserPassword = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
+        loggedInUserData = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_USER_KEY, "");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -123,9 +127,15 @@ public class MainActivity extends AppCompatActivity
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
             loadActivity();
+
+        } else if (id == R.id.nav_account) {
+            fragment = new UpdateUserFragment();
+            FragmentTransaction = true;
+
         } else if (id == R.id.nav_publications_create) {
             fragment = new PublicationCreate();
             FragmentTransaction = true;
+
         } else if (id == R.id.nav_commentary_create) {
             fragment = new RegisterCommentaryFragment();
             FragmentTransaction = true;

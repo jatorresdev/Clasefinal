@@ -35,6 +35,21 @@
     <string name="register.error_invalid_password">Contraseña invalido</string>
     <string name="register.error_field_required">Campo requerido</string>
 
+    <!-- Strings related to update user -->
+    <string name="update.title_activity_update_user">Actualizar cuenta</string>
+    <string name="update.prompt_name">Nombres</string>
+    <string name="update.prompt_last_name">Apellidos</string>
+    <string name="update.prompt_cellphone">Celular</string>
+    <string name="update.prompt_telephone">Teléfono</string>
+    <string name="update.prompt_password">Contraseña</string>
+    <string name="update.action_update">Actualizar</string>
+
+    <string name="update.error_invalid_name">Nombres invalidos</string>
+    <string name="update.error_invalid_last_name">Apellidos invalidos</string>
+    <string name="update.error_invalid_cellphone">Celular invalido</string>
+    <string name="update.error_invalid_telephone">Teléfono invalido</string>
+    <string name="update.error_field_required">Campo requerido</string>
+
     <!--Navegación-->
     <string name="nav.account_title">Cuenta</string>
     <string name="nav.logout">Cerra sesión</string>

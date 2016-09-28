@@ -24,5 +24,5 @@ public interface UserService {
     Call<ResponseBody> createUser(@Body User user);
 
     @PUT("/api/user")
-    Call<ResponseBody> updateUser(@Body User user);
+    Call<UserData> updateUser(@Body User user);
 }
