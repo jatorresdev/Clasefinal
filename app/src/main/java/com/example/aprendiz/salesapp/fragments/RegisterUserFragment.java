@@ -4,9 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,17 +24,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.aprendiz.salesapp.R;
 import com.example.aprendiz.salesapp.clients.SalesAPI;
-import com.example.aprendiz.salesapp.models.User;
 import com.example.aprendiz.salesapp.models.UserData;
 import com.example.aprendiz.salesapp.services.UserService;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.io.IOException;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,9 +62,14 @@ public class RegisterUserFragment extends Fragment {
     private EditText mTelephoneView;
     private EditText mEmailView;
     private EditText mPasswordView;
+    private ImageView mImageView;
 
     private View mProgressView;
     private View mRegisterFormView;
+
+    private Bitmap bitmap;
+    private Uri filePath;
+    private int PICK_IMAGE_REQUEST = 1;
 
     private OnFragmentInteractionListener mListener;
 
@@ -71,7 +85,7 @@ public class RegisterUserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("Log", "onCreateView");
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register_user, container, false);
     }
@@ -87,6 +101,22 @@ public class RegisterUserFragment extends Fragment {
         mTelephoneView = (EditText) view.findViewById(R.id.telephone);
         mEmailView = (EditText) view.findViewById(R.id.email);
         mPasswordView = (EditText) view.findViewById(R.id.password);
+        mImageView = (ImageView) view.findViewById(R.id.register_image);
+
+        Button mImageButton = (Button) view.findViewById(R.id.register_image_button);
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (shouldAskPermission()) {
+                    String[] perms = {"android.permission.WRITE_EXTERNAL_STORAGE"};
+                    int permsRequestCode = 200;
+                    requestPermissions(perms, permsRequestCode);
+                } else {
+                    showFileChooser();
+                }
+            }
+        });
 
         Button mSignUpButton = (Button) view.findViewById(R.id.register_sign_up);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +271,7 @@ public class RegisterUserFragment extends Fragment {
             // perform the user register attempt.
             clearFields();
             showProgress(true);
-            mRegisterTask = new UserRegisterTask(name, lastName, cellphone, telephone, email, password);
+            mRegisterTask = new UserRegisterTask(name, lastName, cellphone, telephone, email, password, filePath);
             mRegisterTask.registerUser();
         }
     }
@@ -319,6 +349,37 @@ public class RegisterUserFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            try {
+                //Getting the Bitmap
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                //Setting the Bitmap to ImageView
+                mImageView.setImageBitmap(bitmap);
+                //mImageView.setImageURI(data.getData());
+
+                // Get real path to make File
+                filePath = Uri.parse(getPath(data.getData()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 200) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showFileChooser();
+            } else {
+                Toast.makeText(getActivity(), "Permiso denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     /**
      * Represents an asynchronous login task used to authenticate
      * the user.
@@ -331,26 +392,48 @@ public class RegisterUserFragment extends Fragment {
         private final String mTelephone;
         private final String mEmail;
         private final String mPassword;
+        private final Uri mPhoto;
 
-        UserRegisterTask(String name, String lastName, String cellphone, String telephone, String email, String password) {
+        UserRegisterTask(String name, String lastName, String cellphone, String telephone, String email, String password, Uri photo) {
             mName = name;
             mLastName = lastName;
             mCellphone = cellphone;
             mTelephone = telephone;
             mEmail = email;
             mPassword = password;
+            mPhoto = photo;
         }
 
         public void registerUser() {
-            User user = new User(mName, mLastName, mEmail, mCellphone, mTelephone, null, mPassword);
+            RequestBody rbPhoto = null;
+            //MultipartBody.Part rbpPhoto = null;
+
+            if (!mPhoto.getPath().toString().isEmpty()) {
+                File file = new File(mPhoto.toString());
+                rbPhoto = RequestBody.create(MediaType.parse("image/*"), file);
+
+//                rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//                rbpPhoto =
+//                        MultipartBody.Part.createFormData("photo", file.getName(), rbPhoto);
+            }
+
+            RequestBody rbName = RequestBody.create(MediaType.parse("multipart/form-data"), mName);
+            RequestBody rbLastName = RequestBody.create(MediaType.parse("multipart/form-data"), mLastName);
+            RequestBody rbEmail = RequestBody.create(MediaType.parse("multipart/form-data"), mEmail);
+            RequestBody rbCellphone = RequestBody.create(MediaType.parse("multipart/form-data"), mCellphone);
+            RequestBody rbTelephone = RequestBody.create(MediaType.parse("multipart/form-data"), mTelephone);
+            RequestBody rbPassword = RequestBody.create(MediaType.parse("multipart/form-data"), mPassword);
 
             UserService userRegisterService = SalesAPI.createService(UserService.class);
-            Call<ResponseBody> callRegisterUser = userRegisterService.createUser(user);
+            Call<ResponseBody> callRegisterUser = userRegisterService.createUser(rbName,
+                    rbLastName, rbCellphone, rbTelephone, rbEmail, rbPassword, rbPhoto);
+
             callRegisterUser.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     int code = response.code();
                     showProgress(false);
+
                     if (code == 200) {
                         Gson gson = new Gson();
 
@@ -360,7 +443,7 @@ public class RegisterUserFragment extends Fragment {
                                     + userDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
 
                         } catch (IOException e) {
-                            Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "1 Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                         }
                     } else if (code == 500) {
                         try {
@@ -368,11 +451,11 @@ public class RegisterUserFragment extends Fragment {
                             Toast.makeText(getActivity(), "El correo ingresado ya ha sido registrado", Toast.LENGTH_LONG).show();
 
                         } catch (IOException e) {
-                            Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "2 Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         mRegisterTask = null;
-                        Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "3 Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -381,9 +464,32 @@ public class RegisterUserFragment extends Fragment {
                     mRegisterTask = null;
                     showProgress(false);
 
+                    Log.d("Error", t.getMessage());
+
                     Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                 }
             });
         }
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    private String getPath(Uri uri) throws Exception {
+        // this method will be used to get real path of Image chosen from gallery.
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(column_index);
+    }
+
+    private boolean shouldAskPermission() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 }

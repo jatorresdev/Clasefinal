@@ -117,6 +117,21 @@
 
             </android.support.design.widget.TextInputLayout>
 
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/sym_def_app_icon"
+                android:id="@+id/register_image"/>
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Imagen"
+                android:id="@+id/register_image_button"
+                android:layout_gravity="center_horizontal" />
+
             <Button
                 android:id="@+id/register_sign_up"
                 style="?android:textAppearanceSmall"
