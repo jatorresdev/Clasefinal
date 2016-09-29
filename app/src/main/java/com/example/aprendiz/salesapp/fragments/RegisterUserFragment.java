@@ -18,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -269,10 +269,10 @@ public class RegisterUserFragment extends Fragment {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user register attempt.
-            clearFields();
             showProgress(true);
             mRegisterTask = new UserRegisterTask(name, lastName, cellphone, telephone, email, password, filePath);
             mRegisterTask.registerUser();
+            clearFields();
         }
     }
 
@@ -291,6 +291,8 @@ public class RegisterUserFragment extends Fragment {
         mTelephoneView.setText("");
         mEmailView.setText("");
         mPasswordView.setText("");
+        mImageView.setImageResource(0);
+        filePath = null;
     }
 
     private boolean isNameValid(String name) {
@@ -359,7 +361,6 @@ public class RegisterUserFragment extends Fragment {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
                 //Setting the Bitmap to ImageView
                 mImageView.setImageBitmap(bitmap);
-                //mImageView.setImageURI(data.getData());
 
                 // Get real path to make File
                 filePath = Uri.parse(getPath(data.getData()));
@@ -406,15 +407,14 @@ public class RegisterUserFragment extends Fragment {
 
         public void registerUser() {
             RequestBody rbPhoto = null;
-            //MultipartBody.Part rbpPhoto = null;
+            MultipartBody.Part rbpPhoto = null;
 
-            if (!mPhoto.getPath().toString().isEmpty()) {
+            if (mPhoto != null && !mPhoto.getPath().toString().isEmpty()) {
                 File file = new File(mPhoto.toString());
-                rbPhoto = RequestBody.create(MediaType.parse("image/*"), file);
 
-//                rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//                rbpPhoto =
-//                        MultipartBody.Part.createFormData("photo", file.getName(), rbPhoto);
+                rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                rbpPhoto =
+                        MultipartBody.Part.createFormData("photo", file.getName(), rbPhoto);
             }
 
             RequestBody rbName = RequestBody.create(MediaType.parse("multipart/form-data"), mName);
@@ -426,7 +426,7 @@ public class RegisterUserFragment extends Fragment {
 
             UserService userRegisterService = SalesAPI.createService(UserService.class);
             Call<ResponseBody> callRegisterUser = userRegisterService.createUser(rbName,
-                    rbLastName, rbCellphone, rbTelephone, rbEmail, rbPassword, rbPhoto);
+                    rbLastName, rbCellphone, rbTelephone, rbEmail, rbPassword, rbpPhoto);
 
             callRegisterUser.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -446,13 +446,9 @@ public class RegisterUserFragment extends Fragment {
                             Toast.makeText(getActivity(), "1 Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                         }
                     } else if (code == 500) {
-                        try {
-                            Log.d("Error", response.errorBody().string());
-                            Toast.makeText(getActivity(), "El correo ingresado ya ha sido registrado", Toast.LENGTH_LONG).show();
+                        mRegisterTask = null;
+                        Toast.makeText(getActivity(), "El correo ingresado ya ha sido registrado", Toast.LENGTH_LONG).show();
 
-                        } catch (IOException e) {
-                            Toast.makeText(getActivity(), "2 Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
-                        }
                     } else {
                         mRegisterTask = null;
                         Toast.makeText(getActivity(), "3 Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
@@ -463,8 +459,6 @@ public class RegisterUserFragment extends Fragment {
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     mRegisterTask = null;
                     showProgress(false);
-
-                    Log.d("Error", t.getMessage());
 
                     Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                 }

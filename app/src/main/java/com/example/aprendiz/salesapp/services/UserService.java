@@ -3,6 +3,7 @@ package com.example.aprendiz.salesapp.services;
 import com.example.aprendiz.salesapp.models.User;
 import com.example.aprendiz.salesapp.models.UserData;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -31,7 +32,7 @@ public interface UserService {
                                   @Part("telephone") RequestBody telephone,
                                   @Part("email") RequestBody email,
                                   @Part("password") RequestBody password,
-                                  @Part("photo\"; filename=\"image.jpg\" ") RequestBody photo);
+                                  @Part MultipartBody.Part file);
 
     @PUT("/api/user")
     Call<UserData> updateUser(@Body User user);
