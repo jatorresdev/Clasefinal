@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by jatorresdev on 24/09/16.
  */
 public class SalesAPI {
-    public static final String ENDPOINT = "http://phplaravel-26935-58004-154595.cloudwaysapps.com";
+    public static final String ENDPOINT = "http://phplaravel-27667-59656-159657.cloudwaysapps.com";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
