@@ -43,6 +43,7 @@
     <string name="update.prompt_cellphone">Celular</string>
     <string name="update.prompt_telephone">Teléfono</string>
     <string name="update.prompt_password">Contraseña</string>
+    <string name="update.action_image">Imagen</string>
     <string name="update.action_update">Actualizar</string>
 
     <string name="update.error_invalid_name">Nombres invalidos</string>

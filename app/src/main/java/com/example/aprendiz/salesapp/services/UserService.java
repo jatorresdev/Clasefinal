@@ -33,6 +33,12 @@ public interface UserService {
                                   @Part("password") RequestBody password,
                                   @Part MultipartBody.Part file);
 
-    @PUT("/api/user")
-    Call<UserData> updateUser(@Body User user);
+    @Multipart
+    @POST("/api/user")
+    Call<UserData> updateUser(@Part("name") RequestBody name,
+                              @Part("last_name") RequestBody lastName,
+                              @Part("cellphone") RequestBody cellphone,
+                              @Part("telephone") RequestBody telephone,
+                              @Part MultipartBody.Part file,
+                              @Part("_method") RequestBody method);
 }

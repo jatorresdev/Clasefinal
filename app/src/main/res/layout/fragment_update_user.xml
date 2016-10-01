@@ -84,6 +84,21 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/image"/>
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/update.action_image"
+                android:id="@+id/update_image"
+                android:layout_gravity="center_horizontal" />
+
             <Button
                 android:id="@+id/update_user"
                 style="?android:textAppearanceSmall"

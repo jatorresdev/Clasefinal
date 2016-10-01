@@ -4,9 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -15,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.aprendiz.salesapp.MainActivity;
@@ -23,9 +29,17 @@ import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.User;
 import com.example.aprendiz.salesapp.models.UserData;
 import com.example.aprendiz.salesapp.services.UserService;
+import com.example.aprendiz.salesapp.utils.ImagesUtils;
 import com.example.aprendiz.salesapp.utils.PrefUtils;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,9 +60,14 @@ public class UpdateUserFragment extends Fragment {
     private EditText mLastNameView;
     private EditText mCellphoneView;
     private EditText mTelephoneView;
+    private ImageView mImageView;
 
     private View mProgressView;
     private View mUpdateFormView;
+
+    private Bitmap bitmap;
+    private Uri filePath;
+    private int PICK_IMAGE_REQUEST = 1;
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,17 +99,40 @@ public class UpdateUserFragment extends Fragment {
         mLastNameView = (EditText) view.findViewById(R.id.last_name);
         mCellphoneView = (EditText) view.findViewById(R.id.cellphone);
         mTelephoneView = (EditText) view.findViewById(R.id.telephone);
+        mImageView = (ImageView) view.findViewById(R.id.image);
 
         mNameView.setText(user.getName());
         mLastNameView.setText(user.getLastName());
         mCellphoneView.setText(user.getCellphone());
         mTelephoneView.setText(user.getTelephone());
 
+        // Proceso carga imagen
+        if (!user.getPhoto().isEmpty()) {
+            Picasso.with(getContext())
+                    .load(user.getPhoto())
+                    .into(mImageView);
+        }
+
+        Button mImageButton = (Button) view.findViewById(R.id.update_image);
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (shouldAskPermission()) {
+                    String[] perms = {"android.permission.WRITE_EXTERNAL_STORAGE"};
+                    int permsRequestCode = 200;
+                    requestPermissions(perms, permsRequestCode);
+                } else {
+                    showFileChooser();
+                }
+            }
+        });
+
         Button mSignUpButton = (Button) view.findViewById(R.id.update_user);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptUpdate(user);
+                attemptUpdate();
             }
         });
 
@@ -140,7 +182,7 @@ public class UpdateUserFragment extends Fragment {
     /**
      * Logica de registro
      */
-    private void attemptUpdate(User user) {
+    private void attemptUpdate() {
         // Reset errors.
         mNameView.setError(null);
         mLastNameView.setError(null);
@@ -204,8 +246,8 @@ public class UpdateUserFragment extends Fragment {
             // Show a progress spinner, and kick off a background task to
             // perform the user register attempt.
             showProgress(true);
-            mUpdateTask = new UserUpdateTask(name, lastName, cellphone, telephone);
-            mUpdateTask.updateUser(user);
+            mUpdateTask = new UserUpdateTask(name, lastName, cellphone, telephone, filePath);
+            mUpdateTask.updateUser();
         }
     }
 
@@ -257,6 +299,36 @@ public class UpdateUserFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            try {
+                //Getting the Bitmap
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                //Setting the Bitmap to ImageView
+                mImageView.setImageBitmap(bitmap);
+
+                // Get real path to make File
+                filePath = Uri.parse(ImagesUtils.getPath(getActivity().getContentResolver(), data.getData()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 200) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showFileChooser();
+            } else {
+                Toast.makeText(getActivity(), "Permiso denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     /**
      * Represents an asynchronous login task used to authenticate
      * the user.
@@ -267,24 +339,38 @@ public class UpdateUserFragment extends Fragment {
         private final String mLastName;
         private final String mCellphone;
         private final String mTelephone;
+        private final Uri mPhoto;
 
-        UserUpdateTask(String name, String lastName, String cellphone, String telephone) {
+        UserUpdateTask(String name, String lastName, String cellphone, String telephone, Uri photo) {
             mName = name;
             mLastName = lastName;
             mCellphone = cellphone;
             mTelephone = telephone;
+            mPhoto = photo;
         }
 
-        public void updateUser(final User user) {
-            user.setName(mName);
-            user.setLastName(mLastName);
-            user.setCellphone(mCellphone);
-            user.setTelephone(mTelephone);
+        public void updateUser() {
+            RequestBody rbPhoto = null;
+            MultipartBody.Part rbpPhoto = null;
+
+            if (mPhoto != null && !mPhoto.toString().isEmpty()) {
+                File file = new File(mPhoto.toString());
+
+                rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                rbpPhoto =
+                        MultipartBody.Part.createFormData("photo", file.getName(), rbPhoto);
+            }
+
+            RequestBody rbName = RequestBody.create(MediaType.parse("text/plain"), mName);
+            RequestBody rbLastName = RequestBody.create(MediaType.parse("text/plain"), mLastName);
+            RequestBody rbCellphone = RequestBody.create(MediaType.parse("text/plain"), mCellphone);
+            RequestBody rbTelephone = RequestBody.create(MediaType.parse("text/plain"), mTelephone);
+            RequestBody rbMethod = RequestBody.create(MediaType.parse("text/plain"), "PUT");
 
             UserService userUpdateService = SalesAPI.createService(UserService.class,
                     ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
 
-            Call<UserData> callRegisterUser = userUpdateService.updateUser(user);
+            Call<UserData> callRegisterUser = userUpdateService.updateUser(rbName, rbLastName, rbCellphone, rbTelephone, rbpPhoto, rbMethod);
             callRegisterUser.enqueue(new Callback<UserData>() {
                 @Override
                 public void onResponse(Call<UserData> call, Response<UserData> response) {
@@ -317,5 +403,16 @@ public class UpdateUserFragment extends Fragment {
                 }
             });
         }
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Seleccione la imagen"), PICK_IMAGE_REQUEST);
+    }
+
+    private boolean shouldAskPermission() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 }
