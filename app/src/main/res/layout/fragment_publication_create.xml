@@ -77,9 +77,11 @@
 
             <Button
                 style="?android:attr/buttonStyleSmall"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Imagen"
+                android:text="@string/publication.action_image"
                 android:id="@+id/btn_image"
                 android:layout_gravity="center_horizontal" />
 

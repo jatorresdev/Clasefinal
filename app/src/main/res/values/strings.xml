@@ -24,6 +24,7 @@
     <string name="register.prompt_cellphone">Celular</string>
     <string name="register.prompt_telephone">Teléfono</string>
     <string name="register.prompt_password">Contraseña</string>
+    <string name="register.action_image">Imagen</string>
     <string name="register.action_sign_up">Crear cuenta</string>
     <string name="register.action_sign_in">Iniciar sesión</string>
 
@@ -60,11 +61,13 @@
     <string name="nav.publication_update">Editar Publicacion</string>
     <string name="nav.publication_addCommentary">Agregar Comentario</string>
     <string name="nav.publication_updateCommentary">Editar Comentario</string>
+
     <!--Publicación-->
     <string name="publication.titleid">IdPublicacion</string>
     <string name="publication.title">Titulo</string>
     <string name="publication.city">Ciudad</string>
     <string name="publication.description">Descripción</string>
+    <string name="publication.action_image">Imagen</string>
     <string name="publication.action_create">Publicar</string>
     <string name="publication.action_update">Modificar</string>
     <string name="publication.error_field_required">Campo requerido</string>
@@ -87,14 +90,5 @@
 
     <string name="register.error_field_required_idPublication">Campo requerido</string>
     <string name="register.error_field_required_message">Campo requerido</string>
-
-    <!--//////////////////////////////////////////////////////////-->
-
-
-    <!-- Codigo a eliminar -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="label_note_id">Note Id</string>
-    <string name="label_note_title">Note Title</string>
 
 </resources>
