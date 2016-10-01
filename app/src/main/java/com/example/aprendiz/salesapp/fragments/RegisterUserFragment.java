@@ -443,7 +443,7 @@ public class RegisterUserFragment extends Fragment {
                                     + userDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
 
                         } catch (IOException e) {
-                            Toast.makeText(getActivity(), "1 Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                         }
                     } else if (code == 500) {
                         mRegisterTask = null;
@@ -451,7 +451,7 @@ public class RegisterUserFragment extends Fragment {
 
                     } else {
                         mRegisterTask = null;
-                        Toast.makeText(getActivity(), "3 Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                     }
                 }
 

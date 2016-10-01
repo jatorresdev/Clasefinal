@@ -25,7 +25,6 @@ public interface UserService {
 
     @Multipart
     @POST("/api/user")
-        //Call<ResponseBody> createUser(@Body User user, @Part("photo") RequestBody photo);
     Call<ResponseBody> createUser(@Part("name") RequestBody name,
                                   @Part("last_name") RequestBody lastName,
                                   @Part("cellphone") RequestBody cellphone,
