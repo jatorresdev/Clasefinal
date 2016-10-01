@@ -4,27 +4,27 @@
         <menu>
             <item
                 android:id="@+id/nav_publications"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/lista"
                 android:title="@string/nav.publication_list" />
             <item
                 android:id="@+id/nav_publications_create"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/crear_publicacion"
                 android:title="@string/nav.publication_create" />
             <item
                 android:id="@+id/nav_publications_update"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/edit_publicacion"
                 android:title="@string/nav.publication_update" />
             <item
                 android:id="@+id/nav_commentary_create"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/add_coment"
                 android:title="@string/nav.publication_addCommentary" />
             <item
                 android:id="@+id/nav_commentary_update"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/edit_coment"
                 android:title="@string/nav.publication_updateCommentary" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/about"
                 android:title="About" />
         </menu>
     </item>
@@ -33,11 +33,11 @@
         <menu>
             <item
                 android:id="@+id/nav_account"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/actualizar_cuenta"
                 android:title="@string/nav.account" />
             <item
                 android:id="@+id/nav_account_logout"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/cerrar_sesion"
                 android:title="@string/nav.logout" />
         </menu>
     </item>

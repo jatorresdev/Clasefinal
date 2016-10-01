@@ -1,5 +1,6 @@
 package com.example.aprendiz.salesapp;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -164,7 +165,10 @@ public class MainActivity extends AppCompatActivity
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_EMAIL_KEY, "");
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_LOGIN_PASSWORD_KEY, "");
             PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_USER_KEY, "");
-            loadActivity();
+            MainActivity.this.finish();
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent);
+            //loadActivity();
 
         } else if (id == R.id.nav_account) {
             fragment = new UpdateUserFragment();
