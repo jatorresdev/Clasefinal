@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link //DummyItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
@@ -49,7 +49,7 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
         }
 
         holder.mTitleView.setText(mValues.get(position).getTitle());
-
+        holder.mDescriptionCotent.setText(mValues.get(position).getDescription());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +70,9 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final ImageView mImageView;
+        public final TextView mDescriptionCotent;
         public final TextView mTitleView;
+
         public Publication mItem;
 
         public ViewHolder(View view) {
@@ -78,6 +80,7 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
             mView = view;
             mImageView = (ImageView) view.findViewById(R.id.image);
             mTitleView = (TextView) view.findViewById(R.id.title);
+            mDescriptionCotent = (TextView) view.findViewById(R.id.descriptionContent);;
         }
     }
 }
