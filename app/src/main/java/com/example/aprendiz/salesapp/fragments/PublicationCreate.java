@@ -287,9 +287,9 @@ public class PublicationCreate extends Fragment {
                         MultipartBody.Part.createFormData("photo", file.getName(), rbPhoto);
             }
 
-            RequestBody rbTitle = RequestBody.create(MediaType.parse("multipart/form-data"), mTitle);
-            RequestBody rbDescription = RequestBody.create(MediaType.parse("multipart/form-data"), mDescription);
-            RequestBody rbCity = RequestBody.create(MediaType.parse("multipart/form-data"), mCity);
+            RequestBody rbTitle = RequestBody.create(MediaType.parse("text/plain"), mTitle);
+            RequestBody rbDescription = RequestBody.create(MediaType.parse("text/plain"), mDescription);
+            RequestBody rbCity = RequestBody.create(MediaType.parse("text/plain"), mCity);
 
 
             PublicationService publicationService = SalesAPI.createService(PublicationService.class,
