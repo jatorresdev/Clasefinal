@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/se_le_tiene"
+    android:orientation="vertical"
+    tools:context=".SplashScreen">
 
-    tools:context="com.example.aprendiz.salesapp.SplashScreen"
-    android:background="@drawable/se_le_tiene">
     <ImageView
-        android:background="@mipmap/ic_launcher"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:scaleType="matrix"
         android:layout_centerInParent="true"
-
-        />
+        android:background="@mipmap/ic_launcher"
+        android:scaleType="matrix" />
 
 </RelativeLayout>
