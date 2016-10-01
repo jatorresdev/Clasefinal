@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -30,6 +29,7 @@ import com.example.aprendiz.salesapp.R;
 import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.UserData;
 import com.example.aprendiz.salesapp.services.UserService;
+import com.example.aprendiz.salesapp.utils.ImagesUtils;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -363,7 +363,7 @@ public class RegisterUserFragment extends Fragment {
                 mImageView.setImageBitmap(bitmap);
 
                 // Get real path to make File
-                filePath = Uri.parse(getPath(data.getData()));
+                filePath = Uri.parse(ImagesUtils.getPath(getActivity().getContentResolver(), data.getData()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -409,7 +409,7 @@ public class RegisterUserFragment extends Fragment {
             RequestBody rbPhoto = null;
             MultipartBody.Part rbpPhoto = null;
 
-            if (mPhoto != null && !mPhoto.getPath().toString().isEmpty()) {
+            if (mPhoto != null && !mPhoto.toString().isEmpty()) {
                 File file = new File(mPhoto.toString());
 
                 rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -470,17 +470,7 @@ public class RegisterUserFragment extends Fragment {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-
-    private String getPath(Uri uri) throws Exception {
-        // this method will be used to get real path of Image chosen from gallery.
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-
-        return cursor.getString(column_index);
+        startActivityForResult(Intent.createChooser(intent, "Seleccione la imagen"), PICK_IMAGE_REQUEST);
     }
 
     private boolean shouldAskPermission() {
