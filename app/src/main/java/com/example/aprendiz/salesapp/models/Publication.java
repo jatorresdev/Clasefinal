@@ -16,17 +16,6 @@ public class Publication {
     private
     Integer userId;
 
-
-    public Publication(String title, String description, String city, String photo,
-                       Integer user_id) {
-
-        this.setTitle(title);
-        this.setDescription(description);
-        this.setCity(city);
-        this.setPhoto(photo);
-        this.setUserId(user_id);
-    }
-
     public Publication(String id, String title, String description, String city, String photo, Integer userId) {
         this.id = id;
         this.title = title;
@@ -35,16 +24,6 @@ public class Publication {
         this.photo = photo;
         this.userId = userId;
     }
-
-   /* public Publication(String id, String title, String description, String city, String photo,
-                       Integer user_id) {
-        this.id=id;
-        this.setTitle(title);
-        this.setDescription(description);
-        this.setCity(city);
-        this.setPhoto(photo);
-        this.setUserId(user_id);
-    }*/
 
     public String getId() {
         return id;
