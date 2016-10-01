@@ -417,12 +417,12 @@ public class RegisterUserFragment extends Fragment {
                         MultipartBody.Part.createFormData("photo", file.getName(), rbPhoto);
             }
 
-            RequestBody rbName = RequestBody.create(MediaType.parse("multipart/form-data"), mName);
-            RequestBody rbLastName = RequestBody.create(MediaType.parse("multipart/form-data"), mLastName);
-            RequestBody rbEmail = RequestBody.create(MediaType.parse("multipart/form-data"), mEmail);
-            RequestBody rbCellphone = RequestBody.create(MediaType.parse("multipart/form-data"), mCellphone);
-            RequestBody rbTelephone = RequestBody.create(MediaType.parse("multipart/form-data"), mTelephone);
-            RequestBody rbPassword = RequestBody.create(MediaType.parse("multipart/form-data"), mPassword);
+            RequestBody rbName = RequestBody.create(MediaType.parse("text/plain"), mName);
+            RequestBody rbLastName = RequestBody.create(MediaType.parse("text/plain"), mLastName);
+            RequestBody rbEmail = RequestBody.create(MediaType.parse("text/plain"), mEmail);
+            RequestBody rbCellphone = RequestBody.create(MediaType.parse("text/plain"), mCellphone);
+            RequestBody rbTelephone = RequestBody.create(MediaType.parse("text/plain"), mTelephone);
+            RequestBody rbPassword = RequestBody.create(MediaType.parse("text/plain"), mPassword);
 
             UserService userRegisterService = SalesAPI.createService(UserService.class);
             Call<ResponseBody> callRegisterUser = userRegisterService.createUser(rbName,
