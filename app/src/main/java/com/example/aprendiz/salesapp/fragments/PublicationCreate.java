@@ -4,27 +4,37 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.aprendiz.salesapp.MainActivity;
 import com.example.aprendiz.salesapp.R;
 import com.example.aprendiz.salesapp.clients.SalesAPI;
-import com.example.aprendiz.salesapp.models.Publication;
 import com.example.aprendiz.salesapp.models.PublicationData;
 import com.example.aprendiz.salesapp.services.PublicationService;
+import com.example.aprendiz.salesapp.utils.ImagesUtils;
 
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,10 +54,14 @@ public class PublicationCreate extends Fragment {
     private EditText mTitle;
     private EditText mCity;
     private EditText mDescription;
-    private EditText mPhoto;
+    private ImageView mPhoto;
 
     private View mProgressView;
     private View mCreateFormView;
+
+    private Bitmap bitmap;
+    private Uri filePath;
+    private int PICK_IMAGE_REQUEST = 1;
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,7 +94,23 @@ public class PublicationCreate extends Fragment {
         mTitle = (EditText) view.findViewById(R.id.title);
         mCity = (EditText) view.findViewById(R.id.city);
         mDescription = (EditText) view.findViewById(R.id.description);
-        mPhoto = null;
+        mPhoto = (ImageView) view.findViewById(R.id.image);
+
+        Button mImageButton = (Button) view.findViewById(R.id.btn_image);
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (shouldAskPermission()) {
+                    String[] perms = {"android.permission.WRITE_EXTERNAL_STORAGE"};
+                    int permsRequestCode = 200;
+                    requestPermissions(perms, permsRequestCode);
+                } else {
+                    showFileChooser();
+                }
+            }
+        });
+
         Button btnCreatePublication = (Button) view.findViewById(R.id.btn_create_publication);
         btnCreatePublication.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +154,6 @@ public class PublicationCreate extends Fragment {
         String title = mTitle.getText().toString();
         String city = mCity.getText().toString();
         String description = mDescription.getText().toString();
-        String photo = null;
 
         boolean cancel = false;
         View focusedView = null;
@@ -150,9 +179,10 @@ public class PublicationCreate extends Fragment {
         if (cancel) {
             focusedView.requestFocus();
         } else {
-            clearFields();
-            mCreatePublicationTask = new CreatePublicationTask(title, city, description, photo);
+            showProgress(true);
+            mCreatePublicationTask = new CreatePublicationTask(title, city, description, filePath);
             mCreatePublicationTask.createPublication();
+            clearFields();
         }
     }
 
@@ -161,6 +191,8 @@ public class PublicationCreate extends Fragment {
         mTitle.setText("");
         mCity.setText("");
         mDescription.setText("");
+        mPhoto.setImageResource(0);
+        filePath = null;
     }
 
     /**
@@ -199,14 +231,44 @@ public class PublicationCreate extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            try {
+                //Getting the Bitmap
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                //Setting the Bitmap to ImageView
+                mPhoto.setImageBitmap(bitmap);
+
+                // Get real path to make File
+                filePath = Uri.parse(ImagesUtils.getPath(getActivity().getContentResolver(), data.getData()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 200) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showFileChooser();
+            } else {
+                Toast.makeText(getActivity(), "Permiso denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     public class CreatePublicationTask {
 
         private final String mTitle;
         private final String mCity;
         private final String mDescription;
-        private final String mPhoto;
+        private final Uri mPhoto;
 
-        public CreatePublicationTask(String title, String city, String description, String photo) {
+        public CreatePublicationTask(String title, String city, String description, Uri photo) {
             mTitle = title;
             mCity = city;
             mDescription = description;
@@ -214,12 +276,27 @@ public class PublicationCreate extends Fragment {
         }
 
         public void createPublication() {
-            Publication publication = new Publication(mTitle, mDescription, mCity, mPhoto, null);
+            RequestBody rbPhoto = null;
+            MultipartBody.Part rbpPhoto = null;
+
+            if (mPhoto != null && !mPhoto.toString().isEmpty()) {
+                File file = new File(mPhoto.toString());
+
+                rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                rbpPhoto =
+                        MultipartBody.Part.createFormData("photo", file.getName(), rbPhoto);
+            }
+
+            RequestBody rbTitle = RequestBody.create(MediaType.parse("multipart/form-data"), mTitle);
+            RequestBody rbDescription = RequestBody.create(MediaType.parse("multipart/form-data"), mDescription);
+            RequestBody rbCity = RequestBody.create(MediaType.parse("multipart/form-data"), mCity);
+
 
             PublicationService publicationService = SalesAPI.createService(PublicationService.class,
                     ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
 
-            Call<PublicationData> callCreatePublication = publicationService.insertPublication(publication);
+            Call<PublicationData> callCreatePublication = publicationService.insertPublication(rbTitle,
+                    rbDescription, rbCity, rbpPhoto);
             callCreatePublication.enqueue(new Callback<PublicationData>() {
                 @Override
                 public void onResponse(Call<PublicationData> call, Response<PublicationData> response) {
@@ -243,6 +320,17 @@ public class PublicationCreate extends Fragment {
                 }
             });
         }
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Seleccione la imagen"), PICK_IMAGE_REQUEST);
+    }
+
+    private boolean shouldAskPermission() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
 }
