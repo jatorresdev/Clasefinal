@@ -1,6 +1,7 @@
-package com.example.aprendiz.salesapp.fragments;
+package com.example.aprendiz.salesapp.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
 
         // Proceso carga imagen
@@ -57,6 +58,8 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
+
+                    Log.d("Item", String.valueOf(position));
                 }
             }
         });

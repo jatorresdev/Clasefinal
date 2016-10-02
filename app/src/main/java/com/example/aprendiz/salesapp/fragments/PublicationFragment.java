@@ -6,14 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.aprendiz.salesapp.MainActivity;
 import com.example.aprendiz.salesapp.R;
+import com.example.aprendiz.salesapp.adapters.PublicationRecyclerViewAdapter;
 import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.Publication;
 import com.example.aprendiz.salesapp.models.PublicationDataList;
