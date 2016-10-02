@@ -1,7 +1,10 @@
 package com.example.aprendiz.salesapp.adapters;
 
+import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aprendiz.salesapp.R;
+import com.example.aprendiz.salesapp.fragments.PublicationDetailFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationFragment.OnListFragmentInteractionListener;
 import com.example.aprendiz.salesapp.models.Publication;
 import com.squareup.picasso.Picasso;
@@ -50,19 +54,7 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
         }
 
         holder.mTitleView.setText(mValues.get(position).getTitle());
-        holder.mDescriptionCotent.setText(mValues.get(position).getDescription());
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-
-                    Log.d("Item", String.valueOf(position));
-                }
-            }
-        });
+        holder.mDescriptionContent.setText(mValues.get(position).getDescription());
     }
 
     @Override
@@ -70,10 +62,10 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final ImageView mImageView;
-        public final TextView mDescriptionCotent;
+        public final TextView mDescriptionContent;
         public final TextView mTitleView;
 
         public Publication mItem;
@@ -83,7 +75,19 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
             mView = view;
             mImageView = (ImageView) view.findViewById(R.id.image);
             mTitleView = (TextView) view.findViewById(R.id.title);
-            mDescriptionCotent = (TextView) view.findViewById(R.id.descriptionContent);;
+            mDescriptionContent = (TextView) view.findViewById(R.id.descriptionContent);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(mItem.getId());
+            Context context = view.getContext();
+
+            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
+            fragmentTransaction.commit();
         }
     }
 }

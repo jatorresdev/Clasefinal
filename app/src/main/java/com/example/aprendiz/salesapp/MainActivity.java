@@ -5,8 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,8 +18,8 @@ import android.widget.TextView;
 
 import com.example.aprendiz.salesapp.fragments.LoginFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationCreate;
+import com.example.aprendiz.salesapp.fragments.PublicationDetailFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationFragment;
-//import com.example.aprendiz.salesapp.fragments.RegisterCommentaryFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationUpdate;
 import com.example.aprendiz.salesapp.fragments.RegisterCommentaryFragment;
 import com.example.aprendiz.salesapp.fragments.RegisterUserFragment;
@@ -42,7 +40,8 @@ public class MainActivity extends AppCompatActivity
         PublicationCreate.OnFragmentInteractionListener,
         RegisterCommentaryFragment.OnFragmentInteractionListener,
         UpdateCommentaryFragment.OnFragmentInteractionListener,
-        PublicationUpdate.OnFragmentInteractionListener{
+        PublicationUpdate.OnFragmentInteractionListener,
+        PublicationDetailFragment.OnFragmentInteractionListener {
 
     public String loggedInUserEmail;
     public String loggedInUserPassword;
@@ -182,14 +181,14 @@ public class MainActivity extends AppCompatActivity
             fragment = new PublicationUpdate();
             FragmentTransaction = true;
 
-        }else if (id == R.id.nav_commentary_create) {
+        } else if (id == R.id.nav_commentary_create) {
             fragment = new RegisterCommentaryFragment();
             FragmentTransaction = true;
 
         } else if (id == R.id.nav_commentary_update) {
-        fragment = new UpdateCommentaryFragment();
-        FragmentTransaction = true;
-         }
+            fragment = new UpdateCommentaryFragment();
+            FragmentTransaction = true;
+        }
 
         if (FragmentTransaction) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();

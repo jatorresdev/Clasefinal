@@ -13,7 +13,6 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 /**
  * Created by jatorresdev on 24/09/16.
@@ -23,8 +22,8 @@ public interface PublicationService {
     @GET("/api/publication")
     Call<ResponseBody> getPublications();
 
-    @GET("/api/publication")
-    Call<ResponseBody> getPublicationById(@Query("id") String id, @Query("comes") String comentario);
+    @GET("/api/publication/{id}")
+    Call<PublicationData> getPublicationById(@Path("id") String id);
 
     @Multipart
     @POST("/api/publication")
@@ -36,11 +35,11 @@ public interface PublicationService {
     @Multipart
     @POST("/api/publication/{id}")
     Call<PublicationData> updatePublication(@Path("id") String id,
-                                         @Part("title") RequestBody title,
-                                         @Part("description") RequestBody description,
-                                         @Part("city") RequestBody city,
-                                         @Part MultipartBody.Part file,
-                                         @Part("_method") RequestBody method);
+                                            @Part("title") RequestBody title,
+                                            @Part("description") RequestBody description,
+                                            @Part("city") RequestBody city,
+                                            @Part MultipartBody.Part file,
+                                            @Part("_method") RequestBody method);
 
     @DELETE("/api/publication")
     Call<ResponseBody> deletePublication(@Field("id") String id);
