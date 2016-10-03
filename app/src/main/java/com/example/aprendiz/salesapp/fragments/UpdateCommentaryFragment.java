@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -120,11 +121,13 @@ public class UpdateCommentaryFragment extends Fragment {
        EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
          EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
          EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryEtMesage);
-        Button btnEditarComentar=(Button)view.findViewById(R.id.updateCommentary);
+        final Button btnEditarComentar=(Button)view.findViewById(R.id.updateCommentary);
 
         btnEditarComentar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(btnEditarComentar.getWindowToken(), 0);
                 attemptRegister();
             }
         });
