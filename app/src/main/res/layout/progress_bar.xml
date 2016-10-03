@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/progress_bar"
-    android:background="@drawable/fondo_progressbar1"
+    android:background="@drawable/fondo_progressbar"
     android:visibility="gone">
 
     <ProgressBar
@@ -19,7 +19,7 @@
         android:id="@+id/image_proggress"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="@drawable/logo1"
+        android:background="@drawable/logo"
         android:visibility="gone"
         android:layout_marginTop="120dp"
         android:layout_marginLeft="20dp"

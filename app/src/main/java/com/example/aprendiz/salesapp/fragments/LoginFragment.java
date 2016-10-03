@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -77,18 +78,22 @@ public class LoginFragment extends Fragment {
         mEmailView = (EditText) view.findViewById(R.id.email);
         mPasswordView = (EditText) view.findViewById(R.id.password);
 
-        Button mSignInButton = (Button) view.findViewById(R.id.login_sign_in);
+        final Button mSignInButton = (Button) view.findViewById(R.id.login_sign_in);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mSignInButton.getWindowToken(), 0);
                 attemptLogin();
             }
         });
 
-        Button mSignUpButton = (Button) view.findViewById(R.id.login_sign_up);
+        final Button mSignUpButton = (Button) view.findViewById(R.id.login_sign_up);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mSignUpButton.getWindowToken(), 0);
                 goRegisterUser();
             }
         });
@@ -99,6 +104,9 @@ public class LoginFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.progress_bar);
 
     }
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

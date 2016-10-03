@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -120,18 +121,22 @@ public class RegisterUserFragment extends Fragment {
             }
         });
 
-        Button mSignUpButton = (Button) view.findViewById(R.id.register_sign_up);
+        final Button mSignUpButton = (Button) view.findViewById(R.id.register_sign_up);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mSignUpButton.getWindowToken(), 0);
                 attemptRegister();
             }
         });
 
-        Button mSignInButton = (Button) view.findViewById(R.id.register_sign_in);
+        final Button mSignInButton = (Button) view.findViewById(R.id.register_sign_in);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mSignInButton.getWindowToken(), 0);
                 goLogin();
             }
         });

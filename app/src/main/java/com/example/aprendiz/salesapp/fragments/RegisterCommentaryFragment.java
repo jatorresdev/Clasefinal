@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -116,11 +117,13 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
 
       EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
         EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryMesage);
-        Button btnComentar=(Button)view.findViewById(R.id.registerCommentary);
+        final Button btnComentar=(Button)view.findViewById(R.id.registerCommentary);
 
         btnComentar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(btnComentar.getWindowToken(), 0);
                 attemptRegister();
             }
         });
