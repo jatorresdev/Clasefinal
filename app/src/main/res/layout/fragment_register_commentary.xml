@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
          android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <!--<android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -35,7 +35,7 @@
                     android:maxLines="1"
                     android:singleLine="true" />
 
-            </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>-->
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -54,13 +54,30 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/registerCommentary"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/register.action_commentary"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/registerCommentary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/register.action_commentary"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/cancelRegisterCommentary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/register.cancelAction_commentary"
+                    android:textStyle="bold"
+                    android:layout_weight="2"/>
+
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

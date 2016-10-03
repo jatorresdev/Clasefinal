@@ -111,7 +111,7 @@ public class PublicationUpdate extends Fragment {
             @Override
             public void onClick(View v) {
                 activity=getActivity();
-                // PublicationUpdate publicationUpdate=new PublicationUpdate();
+
                 PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -79,6 +79,7 @@
     <string name="register_commentary_idPublication">Id Publicacion</string>
     <string name="register_commentary_message">Texto Comentario</string>
     <string name="register.action_commentary">Registrar Comentario</string>
+    <string name="register.cancelAction_commentary">Cancelar</string>
 
     <!--Modificar de comentarios-->
 

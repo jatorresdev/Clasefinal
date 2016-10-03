@@ -3,12 +3,16 @@ package com.example.aprendiz.salesapp.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,6 +50,7 @@ import retrofit2.Response;
 public class RegisterCommentaryFragment extends Fragment {
 
     private CommentaryRegisterTask mRegisterTask = null;
+    private static final String ARG_ID_PUBLICATION = "idPublication";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,13 +68,27 @@ public class RegisterCommentaryFragment extends Fragment {
     private View mProgressBar;
     private View mProgressView;
     private View mRegisterFormView;
+    private Button btnCancelCommentary;
 
     private OnFragmentInteractionListener mListener;
+
+    Activity activity;
+
+    private static String msidPublication;
 
     public RegisterCommentaryFragment() {
         // Required empty public constructor
     }
 
+
+    public static RegisterCommentaryFragment newInstance(String idPublication) {
+        RegisterCommentaryFragment fragment = new RegisterCommentaryFragment();
+        msidPublication=idPublication;
+        Bundle args = new Bundle();
+        args.putString(ARG_ID_PUBLICATION, idPublication);
+        fragment.setArguments(args);
+        return fragment;
+    }
 /*
 Es para agregar comentarios se debe relacionar el id de la publicacion*/
 
@@ -106,16 +125,32 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
                              Bundle savedInstanceState) {
         Log.d("Log", "onCreateView");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register_commentary, container, false);
+        View view= inflater.inflate(R.layout.fragment_register_commentary, container, false);
 
+       // EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
+        //EtIdPublication.setText(msidPublication);
+        btnCancelCommentary=(Button)view.findViewById(R.id.cancelRegisterCommentary);
+        btnCancelCommentary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity=getActivity();
 
+                PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
+                FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
+                fragmentTransaction.commit();
+            }
+        });
+
+            return  view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-      EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
+     // EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
         EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryMesage);
         final Button btnComentar=(Button)view.findViewById(R.id.registerCommentary);
 
@@ -178,21 +213,21 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
     /*Logica del registro*/
 
     private void attemptRegister(){
-        EtIdPublication.setError(null);
+//        EtIdPublication.setError(null);
         EtCommentaryMessage.setError(null);
 
 
-        String idPublication= EtIdPublication.getText().toString();
+        String idPublication=msidPublication;
         String message=EtCommentaryMessage.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(idPublication)) {
+        /*if (TextUtils.isEmpty(idPublication)) {
             EtIdPublication.setError(getString(R.string.register_error_field_required));
             focusView = EtIdPublication;
             cancel = true;
-        } /*else if (!isNameValid(idPublication)) {
+        } else if (!isNameValid(idPublication)) {
             EtIdPublication.setError(getString(R.string.register_error_invalid_name));
             focusView = EtIdPublication;
             cancel = true;
@@ -227,7 +262,7 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
     }
 
     private void clearFields() {
-        EtIdPublication.setText("");
+       // EtIdPublication.setText("");
         EtCommentaryMessage.setText("");
 
     }
@@ -320,6 +355,13 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
                             CommentaryData commentaryDataResponse = gson.fromJson(response.body().string(), CommentaryData.class);
                             Toast.makeText(getActivity(), "Comentario registrado exitosamente! "
                                     + commentaryDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
+                            activity=getActivity();
+
+                            PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
+                            FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
+                            fragmentTransaction.commit();
 
                         } catch (IOException e) {
                             Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();

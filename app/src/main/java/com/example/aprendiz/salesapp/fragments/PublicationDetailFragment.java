@@ -150,7 +150,8 @@ public class PublicationDetailFragment extends Fragment {
             public void onClick(View v) {
                 activity=getActivity();
 
-                RegisterCommentaryFragment registerCommentaryFragment = new RegisterCommentaryFragment();
+                //RegisterCommentaryFragment registerCommentaryFragment = new RegisterCommentaryFragment();
+                RegisterCommentaryFragment registerCommentaryFragment = RegisterCommentaryFragment.newInstance(idPublication);
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content_main,registerCommentaryFragment );
