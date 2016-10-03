@@ -27,14 +27,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <!--<EditText
                     android:id="@+id/edIdPublication"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/publication.titleid"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true" />-->
 
             </android.support.design.widget.TextInputLayout>
 
@@ -99,14 +99,32 @@
                 android:id="@+id/btn_image"
                 android:layout_gravity="center_horizontal" />
 
-            <Button
-                android:id="@+id/btn_update_publication"
-                style="?android:textAppearanceSmall"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/publication.action_update"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_update_publication"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/publication.action_update"
+                    android:textStyle="bold"
+                    android:layout_weight="2"/>
+                <Button
+                    android:id="@+id/btn_Cancelupdate_publication"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/publication.CancelAction_update"
+                    android:textStyle="bold"
+                    android:layout_weight="2"/>
+
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

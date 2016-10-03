@@ -82,6 +82,7 @@ public class PublicationRecyclerViewAdapter extends RecyclerView.Adapter<Publica
         @Override
         public void onClick(View view) {
             PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(mItem.getId());
+
             Context context = view.getContext();
 
             FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();

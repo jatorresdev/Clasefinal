@@ -71,6 +71,7 @@
     <string name="publication.action_image">Imagen</string>
     <string name="publication.action_create">Publicar</string>
     <string name="publication.action_update">Modificar</string>
+    <string name="publication.CancelAction_update">Cancelar</string>
     <string name="publication.error_field_required">Campo requerido</string>
 
     <!--Registro de comentarios-->

@@ -86,6 +86,7 @@ public class PublicationDetailFragment extends Fragment {
         return fragment;
     }
 
+
     public PublicationDetailFragment() {
         // Required empty public constructor
     }
@@ -133,11 +134,8 @@ public class PublicationDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 activity=getActivity();
-                /*EM =(EnviarDatos) activity;
-                String title=mTitle.getText().toString();
-                EM.enviarInformacion(title);*/
-
-                PublicationUpdate publicationUpdate=new PublicationUpdate();
+               // PublicationUpdate publicationUpdate=new PublicationUpdate();
+                PublicationUpdate publicationUpdate = PublicationUpdate.newInstance(idPublication);
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content_main, publicationUpdate);
