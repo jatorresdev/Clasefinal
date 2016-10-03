@@ -1,13 +1,18 @@
 package com.example.aprendiz.salesapp.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +45,9 @@ public class PublicationDetailFragment extends Fragment {
     private TextView mCity;
     private TextView mDescription;
     private ImageView mPhoto;
+    Button tbnBacktoList;
+    Activity activity;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -47,8 +55,8 @@ public class PublicationDetailFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param //param1 Parameter 1.
+     * @param //param2 Parameter 2.
      * @return A new instance of fragment PublicationDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -76,7 +84,24 @@ public class PublicationDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_publication_detail, container, false);
+
+        View view= inflater.inflate(R.layout.fragment_publication_detail, container, false);
+        tbnBacktoList=(Button)view.findViewById(R.id.btnBack);
+
+        tbnBacktoList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity=getActivity();
+                Context context = v.getContext();
+                PublicationFragment publicationFragment= new PublicationFragment();
+                FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content_main, publicationFragment);
+                fragmentTransaction.commit();
+            }
+        });
+
+        return view;
     }
 
     @Override

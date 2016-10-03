@@ -92,4 +92,9 @@
     <string name="register.error_field_required_idPublication">Campo requerido</string>
     <string name="register.error_field_required_message">Campo requerido</string>
 
+    <!--Errores en Registro de comentarios-->
+
+    <string name="detailPublication_btnBack">Atras</string>
+    <string name="detailPublication_btnAddComentary">Agregar Comentario</string>
+
 </resources>
