@@ -4,13 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.example.aprendiz.salesapp.fragments.UpdateCommentaryFragment">
 
-    <ProgressBar
-        android:id="@+id/register_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+    <include
+        layout="@layout/progress_bar"
+
+        />
 
     <ScrollView
         android:id="@+id/register_user_form"

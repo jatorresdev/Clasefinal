@@ -48,6 +48,8 @@ public class LoginFragment extends Fragment {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View mImageProgress;
+    private View mProgressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -93,6 +95,8 @@ public class LoginFragment extends Fragment {
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
+        mImageProgress = view.findViewById(R.id.image_proggress);
+        mProgressBar = view.findViewById(R.id.progress_bar);
 
     }
 
@@ -233,17 +237,22 @@ public class LoginFragment extends Fragment {
                 }
             });
 
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+
                 }
             });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }

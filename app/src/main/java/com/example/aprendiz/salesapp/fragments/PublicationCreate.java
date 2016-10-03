@@ -58,6 +58,8 @@ public class PublicationCreate extends Fragment {
 
     private View mProgressView;
     private View mCreateFormView;
+    private View mImageProgress;
+    private View mProgressBar;
 
     private Bitmap bitmap;
     private Uri filePath;
@@ -120,7 +122,9 @@ public class PublicationCreate extends Fragment {
         });
 
         mCreateFormView = view.findViewById(R.id.create_publication_form);
-        mProgressView = view.findViewById(R.id.create_progress);
+        mProgressView = view.findViewById(R.id.login_progress);
+        mImageProgress = view.findViewById(R.id.image_proggress);
+        mProgressBar = view.findViewById(R.id.progress_bar);
 
     }
 
@@ -215,6 +219,8 @@ public class PublicationCreate extends Fragment {
                 }
             });
 
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -228,6 +234,8 @@ public class PublicationCreate extends Fragment {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mCreateFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
 

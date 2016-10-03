@@ -58,6 +58,8 @@ public class UpdateCommentaryFragment extends Fragment {
     private EditText EtIdCommentary;
     private EditText EtCommentaryMessage;
 
+    private View mImageProgress;
+    private View mProgressBar;
     private View mProgressView;
     private View mRegisterFormView;
 
@@ -128,7 +130,9 @@ public class UpdateCommentaryFragment extends Fragment {
         });
 
         mRegisterFormView = view.findViewById(R.id.register_user_form);
-        mProgressView = view.findViewById(R.id.register_progress);
+        mProgressView = view.findViewById(R.id.login_progress);
+        mImageProgress = view.findViewById(R.id.image_proggress);
+        mProgressBar = view.findViewById(R.id.progress_bar);
     }
 
     @Override
@@ -254,6 +258,8 @@ public class UpdateCommentaryFragment extends Fragment {
                 }
             });
 
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -265,6 +271,8 @@ public class UpdateCommentaryFragment extends Fragment {
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }

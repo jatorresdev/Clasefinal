@@ -58,6 +58,8 @@ public class RegisterCommentaryFragment extends Fragment {
     private EditText EtIdPublication;
     private EditText EtCommentaryMessage;
 
+    private View mImageProgress;
+    private View mProgressBar;
     private View mProgressView;
     private View mRegisterFormView;
 
@@ -124,7 +126,9 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
         });
 
         mRegisterFormView = view.findViewById(R.id.register_user_form);
-        mProgressView = view.findViewById(R.id.register_progress);
+        mProgressView = view.findViewById(R.id.login_progress);
+        mImageProgress = view.findViewById(R.id.image_proggress);
+        mProgressBar = view.findViewById(R.id.progress_bar);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -262,6 +266,8 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
                 }
             });
 
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -275,6 +281,8 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
 

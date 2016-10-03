@@ -24,7 +24,7 @@
                 android:title="@string/nav.publication_updateCommentary" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/about"
+                android:icon="@drawable/about1"
                 android:title="About" />
         </menu>
     </item>

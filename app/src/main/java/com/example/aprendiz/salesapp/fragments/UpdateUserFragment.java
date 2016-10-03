@@ -61,6 +61,8 @@ public class UpdateUserFragment extends Fragment {
     private EditText mTelephoneView;
     private ImageView mImageView;
 
+    private View mImageProgress;
+    private View mProgressBar;
     private View mProgressView;
     private View mUpdateFormView;
 
@@ -136,7 +138,9 @@ public class UpdateUserFragment extends Fragment {
         });
 
         mUpdateFormView = view.findViewById(R.id.update_user_form);
-        mProgressView = view.findViewById(R.id.update_user_progress);
+        mProgressView = view.findViewById(R.id.login_progress);
+        mImageProgress = view.findViewById(R.id.image_proggress);
+        mProgressBar = view.findViewById(R.id.progress_bar);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -282,6 +286,8 @@ public class UpdateUserFragment extends Fragment {
                 }
             });
 
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -293,6 +299,8 @@ public class UpdateUserFragment extends Fragment {
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
+            mImageProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mUpdateFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
