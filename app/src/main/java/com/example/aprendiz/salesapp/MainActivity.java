@@ -177,13 +177,13 @@ public class MainActivity extends AppCompatActivity
             fragment = new PublicationCreate();
             FragmentTransaction = true;
 
-        } else if (id == R.id.nav_publications_update) {
+      /*  } else if (id == R.id.nav_publications_update) {
             fragment = new PublicationUpdate();
-            FragmentTransaction = true;
+            FragmentTransaction = true;*/
 
-        } else if (id == R.id.nav_commentary_create) {
+        /*} else if (id == R.id.nav_commentary_create) {
             fragment = new RegisterCommentaryFragment();
-            FragmentTransaction = true;
+            FragmentTransaction = true;*/
 
         } else if (id == R.id.nav_commentary_update) {
             fragment = new UpdateCommentaryFragment();
@@ -212,4 +212,11 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Publication item) {
 
     }
+
+
+   /* @Override
+    public void enviarInformacion(String title) {
+        PublicationUpdate publicationUpdate= (PublicationUpdate) getSupportFragmentManager().findFragmentById(R.id.content_publication_update);
+        publicationUpdate.recibir(title);
+    }*/
 }

@@ -45,8 +45,10 @@ public class PublicationDetailFragment extends Fragment {
     private TextView mCity;
     private TextView mDescription;
     private ImageView mPhoto;
-    Button tbnBacktoList;
+    Button tbnBacktoList,btnEdiPublication,btnAddCommentary;
+    //EnviarDatos EM;
     Activity activity;
+
 
 
     private OnFragmentInteractionListener mListener;
@@ -72,6 +74,11 @@ public class PublicationDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
+   /* public interface EnviarDatos {
+
+        public void enviarInformacion(String title);
+    }*/
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +94,19 @@ public class PublicationDetailFragment extends Fragment {
 
         View view= inflater.inflate(R.layout.fragment_publication_detail, container, false);
         tbnBacktoList=(Button)view.findViewById(R.id.btnBack);
+        btnEdiPublication=(Button)view.findViewById(R.id.btnEditPublication);
+        btnAddCommentary=(Button)view.findViewById(R.id.btnNewCommentary);
+
+
+
+        //mTitle=(TextView)view.findViewById(R.id.edTitle);
+
 
         tbnBacktoList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 activity=getActivity();
-                Context context = v.getContext();
+
                 PublicationFragment publicationFragment= new PublicationFragment();
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -100,6 +114,38 @@ public class PublicationDetailFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+        btnEdiPublication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity=getActivity();
+                /*EM =(EnviarDatos) activity;
+                String title=mTitle.getText().toString();
+                EM.enviarInformacion(title);*/
+
+                PublicationUpdate publicationUpdate=new PublicationUpdate();
+                FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content_main, publicationUpdate);
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
+        btnAddCommentary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity=getActivity();
+
+                RegisterCommentaryFragment registerCommentaryFragment = new RegisterCommentaryFragment();
+                FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content_main,registerCommentaryFragment );
+                fragmentTransaction.commit();
+            }
+
+        });
+
 
         return view;
     }
@@ -126,8 +172,11 @@ public class PublicationDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

@@ -95,6 +95,7 @@
     <!--Errores en Registro de comentarios-->
 
     <string name="detailPublication_btnBack">Atras</string>
-    <string name="detailPublication_btnAddComentary">Agregar Comentario</string>
+    <string name="detailPublication_btnAddComentary"> + Comentario</string>
+    <string name="detailPublication_btnEditPublication">Edi.Publicacion</string>
 
 </resources>

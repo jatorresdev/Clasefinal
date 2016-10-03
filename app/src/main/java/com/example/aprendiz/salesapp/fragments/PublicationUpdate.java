@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aprendiz.salesapp.MainActivity;
@@ -82,8 +83,15 @@ public class PublicationUpdate extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_publication_update, container, false);
+        View view = inflater.inflate(R.layout.fragment_publication_update, container, false);
+        mTitle=(EditText) view.findViewById(R.id.edTitle);
+
+        return  view;
     }
+
+   /* public void recibir(String msg){
+        mTitle.setText(msg);
+    }*/
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -93,6 +101,8 @@ public class PublicationUpdate extends Fragment {
         mCity = (EditText) view.findViewById(R.id.edCity);
         mDescription = (EditText) view.findViewById(R.id.edDescription);
         mPhoto = (ImageView) view.findViewById(R.id.image);
+
+
 
         Button mImageButton = (Button) view.findViewById(R.id.btn_image);
         mImageButton.setOnClickListener(new View.OnClickListener() {
