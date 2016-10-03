@@ -12,18 +12,33 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aprendiz.salesapp.R;
+import com.example.aprendiz.salesapp.adapters.PublicationRecyclerViewAdapter;
 import com.example.aprendiz.salesapp.clients.SalesAPI;
+import com.example.aprendiz.salesapp.models.Commentary;
+import com.example.aprendiz.salesapp.models.CommentaryData;
+import com.example.aprendiz.salesapp.models.CommentaryDataList;
 import com.example.aprendiz.salesapp.models.Publication;
 import com.example.aprendiz.salesapp.models.PublicationData;
+import com.example.aprendiz.salesapp.models.PublicationDataList;
+import com.example.aprendiz.salesapp.services.CommentaryService;
 import com.example.aprendiz.salesapp.services.PublicationService;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +60,7 @@ public class PublicationDetailFragment extends Fragment {
     private TextView mCity;
     private TextView mDescription;
     private ImageView mPhoto;
+    private ListView  listVista;
     Button tbnBacktoList,btnEdiPublication,btnAddCommentary;
     //EnviarDatos EM;
     Activity activity;
@@ -93,11 +109,10 @@ public class PublicationDetailFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view= inflater.inflate(R.layout.fragment_publication_detail, container, false);
+
         tbnBacktoList=(Button)view.findViewById(R.id.btnBack);
         btnEdiPublication=(Button)view.findViewById(R.id.btnEditPublication);
         btnAddCommentary=(Button)view.findViewById(R.id.btnNewCommentary);
-
-
 
         //mTitle=(TextView)view.findViewById(R.id.edTitle);
 
@@ -158,8 +173,10 @@ public class PublicationDetailFragment extends Fragment {
         mCity = (TextView) view.findViewById(R.id.city);
         mDescription = (TextView) view.findViewById(R.id.description);
         mPhoto = (ImageView) view.findViewById(R.id.image);
+        listVista=(ListView)view.findViewById(R.id.listCommentary);
 
         getPublicationId(idPublication);
+        getCommentaryPublicationId(idPublication,view.getContext());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -231,6 +248,55 @@ public class PublicationDetailFragment extends Fragment {
 
             @Override
             public void onFailure(Call<PublicationData> call, Throwable t) {
+                Toast.makeText(getActivity(), "Ha ocurrido un error", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+    }
+
+    public void getCommentaryPublicationId(final String id, final Context context) {
+
+        CommentaryService commentaryShowService = SalesAPI.createService(CommentaryService.class);
+        Call<ResponseBody> callCommentaryShow = commentaryShowService.getCommentaryForId(id);
+        callCommentaryShow.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Gson gson = new Gson();
+                    try {
+
+                        Commentary comentaryObj;
+
+                        ArrayList <Commentary> listado;
+                        CommentaryDataList commentaryDataList = gson.fromJson(response.body().string(), CommentaryDataList.class);
+                        List<Commentary> commentaries = commentaryDataList.getData();
+                        List<String> datos = new ArrayList<String>();
+                        for (int i=0;i<commentaries.size();i++) {
+
+                            comentaryObj=commentaries.get(i);
+                            //listVista.setContentDescription(comentaryObj.getMessage());
+                            datos.add(i,comentaryObj.getMessage());
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_expandable_list_item_1,datos);
+
+                        /*listado=new ArrayList<Commentary>(commentaries);*/
+                        listVista.setAdapter(adapter);
+
+
+                        //recyclerView.setAdapter(new PublicationRecyclerViewAdapter(publications, mListener));
+
+                    } catch (IOException e) {
+                        Toast.makeText(getActivity(), "Ha ocurrido un error obteniendo las publicaciones", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "Ha ocurrido un error", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getActivity(), "Ha ocurrido un error", Toast.LENGTH_LONG).show();
             }
         });

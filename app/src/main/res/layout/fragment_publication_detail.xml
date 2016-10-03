@@ -58,8 +58,26 @@
         android:layout_width="match_parent"
         android:layout_height="76dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="-42dp"
         android:textSize="18sp"
         android:layout_below="@+id/city"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/titleComentary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:padding="4sp"
+        android:textSize="24sp"
+        android:text="Comentarios"
+        android:textStyle="bold" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listCommentary">
+
+    </ListView>
 
 </LinearLayout>
