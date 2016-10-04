@@ -14,11 +14,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -50,28 +48,21 @@ public class UpdateCommentaryFragment extends Fragment {
 
     private CommentaryUpdateTask mRegisterTask = null;
     private static final String ARG_ID_PUBLICATION = "idPublication";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-   // private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_ID_COMMENTARY = "idCommentary";
 
-    // TODO: Rename and change types of parameters
-    //private String mParam1;
-    //private String mParam2;
-
-    private EditText EtIdPublication;
-    private EditText EtIdCommentary;
-    private EditText EtCommentaryMessage;
+    private EditText mCommentaryMessage;
 
     private View mImageProgress;
     private View mProgressBar;
     private View mProgressView;
     private View mRegisterFormView;
 
-    private static String msidPublication;
-    private static String msidComentary;
+    private String idPublication;
+    private String idCommentary;
 
+    private Button btnUpdateCommentary;
     private Button btnCancelUpdateCommentary;
+    private Button btnDeleteUpdateCommentary;
 
     Activity activity;
 
@@ -81,66 +72,58 @@ public class UpdateCommentaryFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static UpdateCommentaryFragment newInstance(String idPublication,String idCommentary) {
+    public static UpdateCommentaryFragment newInstance(String idPublication, String idCommentary) {
         UpdateCommentaryFragment fragment = new UpdateCommentaryFragment();
-        msidPublication=idPublication;
-        msidComentary=idCommentary;
         Bundle args = new Bundle();
         args.putString(ARG_ID_PUBLICATION, idPublication);
+        args.putString(ARG_ID_COMMENTARY, idCommentary);
         fragment.setArguments(args);
         return fragment;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param //param1 Parameter 1.
-     * @param //param2 Parameter 2.
-     * @return A new instance of fragment UpdateCommentaryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    /*public static UpdateCommentaryFragment newInstance(String param1, String param2) {
-        UpdateCommentaryFragment fragment = new UpdateCommentaryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Log", "onCreate");
-      /*  if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
+        if (getArguments() != null) {
+            idPublication = getArguments().getString(ARG_ID_PUBLICATION);
+            idCommentary = getArguments().getString(ARG_ID_COMMENTARY);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("Log", "onCreateView");
-        // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_update_commentary, container, false);
-        EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
-        EtIdPublication.setText(msidPublication);
-        EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
-        EtIdCommentary.setText(msidComentary);
+        View view = inflater.inflate(R.layout.fragment_update_commentary, container, false);
 
-        btnCancelUpdateCommentary=(Button)view.findViewById(R.id.CancelUpdateCommentary);
+        btnCancelUpdateCommentary = (Button) view.findViewById(R.id.CancelUpdateCommentary);
         btnCancelUpdateCommentary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity=getActivity();
+                activity = getActivity();
 
-                PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
+                PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(idPublication);
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
                 fragmentTransaction.commit();
+            }
+        });
+
+        btnDeleteUpdateCommentary = (Button) view.findViewById(R.id.deleteCommentary);
+        btnDeleteUpdateCommentary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProgress(true);
+                deleteCommentary();
+            }
+        });
+
+        btnUpdateCommentary = (Button) view.findViewById(R.id.updateCommentary);
+
+        btnUpdateCommentary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptRegister();
             }
         });
 
@@ -158,24 +141,13 @@ public class UpdateCommentaryFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-       EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
-         EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
-         EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryEtMesage);
-        final Button btnEditarComentar=(Button)view.findViewById(R.id.updateCommentary);
-
-        btnEditarComentar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(btnEditarComentar.getWindowToken(), 0);
-                attemptRegister();
-            }
-        });
-
-        mRegisterFormView = view.findViewById(R.id.register_user_form);
+        mCommentaryMessage = (EditText) view.findViewById(R.id.message);
+        mRegisterFormView = view.findViewById(R.id.update_commentary_form);
         mProgressView = view.findViewById(R.id.login_progress);
         mImageProgress = view.findViewById(R.id.image_proggress);
         mProgressBar = view.findViewById(R.id.progress_bar);
+
+        getCommentId(idPublication, idCommentary);
     }
 
     @Override
@@ -210,37 +182,77 @@ public class UpdateCommentaryFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void attemptRegister(){
-        EtIdPublication.setError(null);
-        EtIdCommentary.setError(null);
-        EtCommentaryMessage.setError(null);
+    public void getCommentId(String idPublication, String id) {
+        CommentaryService commentaryService = SalesAPI.createService(CommentaryService.class);
 
-        String idPublication= EtIdPublication.getText().toString();
-        String idCommentary=EtIdCommentary.getText().toString();
-        String message=EtCommentaryMessage.getText().toString();
+        Call<CommentaryData> callCommentaryShow = commentaryService.getCommentaryById(idPublication, id);
+        callCommentaryShow.enqueue(new Callback<CommentaryData>() {
+            @Override
+            public void onResponse(Call<CommentaryData> call, Response<CommentaryData> response) {
+                if (response.isSuccessful()) {
+                    Commentary commentary = response.body().getData();
+
+                    mCommentaryMessage.setText(commentary.getMessage());
+                } else {
+                    Toast.makeText(getActivity(), "Ha ocurrido un error", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentaryData> call, Throwable t) {
+                Toast.makeText(getActivity(), "Ha ocurrido un error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void deleteCommentary() {
+        CommentaryService commentaryService = SalesAPI.createService(CommentaryService.class,
+                ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
+
+        Call<ResponseBody> callPublicationShow = commentaryService.deleteCommentary(idPublication, idCommentary);
+        callPublicationShow.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                showProgress(false);
+
+                if (response.isSuccessful()) {
+                    activity = getActivity();
+
+                    PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(idPublication);
+                    FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
+                    fragmentTransaction.commit();
+
+                    Toast.makeText(getActivity(), "Comentario eliminado de forma exitosa", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(getActivity(), "Ha ocurrido un error", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                showProgress(false);
+                Toast.makeText(getActivity(), "Ha ocurrido un error elimiando la publicación", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void attemptRegister() {
+        mCommentaryMessage.setError(null);
+
+        String message = mCommentaryMessage.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(idPublication)) {
-            EtIdPublication.setError(getString(R.string.register_error_field_required));
-            focusView = EtIdPublication;
-            cancel = true;
-        }
 
         if (TextUtils.isEmpty(message)) {
-            EtCommentaryMessage.setError(getString(R.string.register_error_field_required));
-            focusView = EtCommentaryMessage;
+            mCommentaryMessage.setError(getString(R.string.register_error_field_required));
+            focusView = mCommentaryMessage;
             cancel = true;
         }
-
-        if (TextUtils.isEmpty(idCommentary)) {
-            EtIdCommentary.setError(getString(R.string.register_error_field_required));
-            focusView = EtIdCommentary;
-            cancel = true;
-        }
-
-
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -251,37 +263,13 @@ public class UpdateCommentaryFragment extends Fragment {
             // perform the user register attempt.
             clearFields();
             showProgress(true);
-            mRegisterTask = new CommentaryUpdateTask(idPublication,message,idCommentary);
+            mRegisterTask = new CommentaryUpdateTask(idPublication, idCommentary, message);
             mRegisterTask.updateCommentary();
         }
-
-
     }
 
     private void clearFields() {
-        EtIdPublication.setText("");
-        EtCommentaryMessage.setText("");
-        EtIdCommentary.setText("");
-    }
-
-    private boolean isNameValid(String name) {
-        return name.length() > 4;
-    }
-
-    private boolean isLastNameValid(String lastName) {
-        return lastName.length() > 4;
-    }
-
-    private boolean isNumberValid(String number) {
-        return number.matches("\\d+(?:\\.\\d+)?") && number.length() <= 10;
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        mCommentaryMessage.setText("");
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -322,72 +310,58 @@ public class UpdateCommentaryFragment extends Fragment {
     }
 
     public class CommentaryUpdateTask {
-
-
         private final String mIdPublication;
         private final String mIdCommentary;
         private final String mMessage;
 
-        public CommentaryUpdateTask(String mIdPublication,String mMessage, String mIdCommentary) {
-            this.mIdPublication = mIdPublication;
-            this.mIdCommentary = mIdCommentary;
-            this.mMessage = mMessage;
+        public CommentaryUpdateTask(String idPublication, String idCommentary, String message) {
+            this.mIdPublication = idPublication;
+            this.mIdCommentary = idCommentary;
+            this.mMessage = message;
         }
 
         public void updateCommentary() {
-        Commentary commentary = new Commentary(mIdPublication,mMessage,mIdCommentary);
+            CommentaryService commentaryServices = SalesAPI.createService(CommentaryService.class,
+                    ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
 
-
-        CommentaryService commentaryServices = SalesAPI.createService(CommentaryService.class,
-                ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
-        Call<ResponseBody> callUpdateCommentary = commentaryServices.updateCommentary(mIdPublication,mMessage,mIdCommentary);
+            Call<ResponseBody> callUpdateCommentary = commentaryServices.updateCommentary(mIdPublication, mMessage, mIdCommentary);
             callUpdateCommentary.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                int code = response.code();
-                showProgress(false);
-                if (code == 200) {
-                    Gson gson = new Gson();
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    showProgress(false);
+                    if (response.isSuccessful()) {
+                        Gson gson = new Gson();
 
-                    try {
-                        CommentaryData commentaryDataResponse = gson.fromJson(response.body().string(), CommentaryData.class);
-                        Toast.makeText(getActivity(), "Comentario editado exitosamente! "
-                                + commentaryDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
+                        try {
+                            CommentaryData commentaryDataResponse = gson.fromJson(response.body().string(), CommentaryData.class);
+                            Toast.makeText(getActivity(), "Comentario editado exitosamente! "
+                                    + commentaryDataResponse.getData().getMessage(), Toast.LENGTH_LONG).show();
 
-                        activity = getActivity();
+                            activity = getActivity();
 
-                        PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
-                        FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
-                        fragmentTransaction.commit();
+                            PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(mIdPublication);
+                            FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
+                            fragmentTransaction.commit();
 
-                    } catch (IOException e) {
+                        } catch (IOException e) {
+                            Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        mRegisterTask = null;
                         Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                     }
-                } else if (code == 500) {
-                    try {
-                        Log.d("Error", response.errorBody().string());
-                        Toast.makeText(getActivity(), "El correo ingresado ya ha sido registrado", Toast.LENGTH_LONG).show();
+                }
 
-                    } catch (IOException e) {
-                        Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
-                    }
-                } else {
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     mRegisterTask = null;
+                    showProgress(false);
+
                     Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                mRegisterTask = null;
-                showProgress(false);
-
-                Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
-            }
-
-        });
+            });
+        }
     }
-}
 }

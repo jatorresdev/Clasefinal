@@ -7,28 +7,12 @@ public class Commentary {
 
     private String id;
     private String message;
-    private String publication_id;
-    private int user_id;
+    private Publication publication;
+    private User user;
 
-
-  /* public Commentary(String id, String message, String publication_id, int user_id) {
-        this.id = id;
-        this.message = message;
-        this.publication_id = publication_id;
-        this.user_id = user_id;
-    }*/
-
-    public Commentary(String publication_id, String message,String id ) {
-        this.id = id;
-        this.message = message;
-        this.publication_id = publication_id;
-
-    }
-    public Commentary(String publication_id, String message) {
-
-        this.message = message;
-        this.publication_id = publication_id;
-
+    public Commentary(String id, String message) {
+        this.setId(id);
+        this.setMessage(message);
     }
 
     public String getId() {
@@ -47,23 +31,19 @@ public class Commentary {
         this.message = message;
     }
 
-    public String getPublication_id() {
-        return publication_id;
+    public Publication getPublication() {
+        return publication;
     }
 
-    public void setPublication_id(String publication_id) {
-        this.publication_id = publication_id;
+    public void setPublication(Publication publication) {
+        this.publication = publication;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public String getFullName() {
-        return this.publication_id + " " + this.message;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
