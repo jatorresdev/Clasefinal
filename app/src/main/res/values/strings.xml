@@ -98,6 +98,7 @@
 
     <string name="detailPublication_btnBack">Atras</string>
     <string name="detailPublication_btnAddComentary"> + Comentario</string>
-    <string name="detailPublication_btnEditPublication">Edi.Publicacion</string>
+    <string name="detailPublication_btnEditPublication">Editar</string>
+    <string name="detailPublication_btnDeletePublication">Eliminar</string>
 
 </resources>

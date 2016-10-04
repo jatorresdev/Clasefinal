@@ -14,17 +14,26 @@
             android:layout_height="wrap_content"
             android:text="@string/detailPublication_btnBack"
             android:id="@+id/btnBack" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detailPublication_btnAddComentary"
-            android:id="@+id/btnNewCommentary" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/detailPublication_btnEditPublication"
             android:id="@+id/btnEditPublication"
             android:visibility="gone" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detailPublication_btnDeletePublication"
+            android:id="@+id/btnDeletePublication"
+            android:visibility="gone" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detailPublication_btnAddComentary"
+            android:id="@+id/btnNewCommentary" />
     </LinearLayout>
 
 

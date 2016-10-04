@@ -1,5 +1,6 @@
 package com.example.aprendiz.salesapp.services;
 
+import com.example.aprendiz.salesapp.models.Publication;
 import com.example.aprendiz.salesapp.models.PublicationData;
 
 import okhttp3.MultipartBody;
@@ -41,6 +42,6 @@ public interface PublicationService {
                                             @Part MultipartBody.Part file,
                                             @Part("_method") RequestBody method);
 
-    @DELETE("/api/publication")
-    Call<ResponseBody> deletePublication(@Field("id") String id);
+    @DELETE("/api/publication/{id}")
+    Call<ResponseBody> deletePublication(@Path("id") String id);
 }

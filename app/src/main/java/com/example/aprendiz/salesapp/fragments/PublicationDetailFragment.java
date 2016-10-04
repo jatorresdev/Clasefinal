@@ -59,7 +59,7 @@ public class PublicationDetailFragment extends Fragment {
     private ImageView mPhoto;
     private View mView;
     private ListView listVista;
-    Button tbnBacktoList, btnEdiPublication, btnAddCommentary;
+    Button tbnBacktoList, btnEdiPublication, btnDelPublication, btnAddCommentary;
     Activity activity;
 
 
@@ -104,6 +104,7 @@ public class PublicationDetailFragment extends Fragment {
 
         tbnBacktoList = (Button) view.findViewById(R.id.btnBack);
         btnEdiPublication = (Button) view.findViewById(R.id.btnEditPublication);
+        btnDelPublication = (Button) view.findViewById(R.id.btnDeletePublication);
         btnAddCommentary = (Button) view.findViewById(R.id.btnNewCommentary);
         activity = getActivity();
 
@@ -127,6 +128,13 @@ public class PublicationDetailFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content_main, publicationUpdate);
                 fragmentTransaction.commit();
+            }
+        });
+
+        btnDelPublication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deletePublication();
             }
         });
 
@@ -226,6 +234,7 @@ public class PublicationDetailFragment extends Fragment {
                     // Visibilidad de botones de acuerdo a permisos
                     if (publication.getUser().getEmail().equals(emailUser)) {
                         btnEdiPublication.setVisibility(mView.VISIBLE);
+                        btnDelPublication.setVisibility(mView.VISIBLE);
                     }
 
                 } else {
@@ -238,8 +247,36 @@ public class PublicationDetailFragment extends Fragment {
                 Toast.makeText(getActivity(), "Ha ocurrido un error", Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+    public void deletePublication() {
+        PublicationService publicationShowService = SalesAPI.createService(PublicationService.class,
+                ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
 
+        Call<ResponseBody> callPublicationShow = publicationShowService.deletePublication(idPublication);
+        callPublicationShow.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+
+                    PublicationFragment publicationFragment = new PublicationFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.content_main, publicationFragment);
+                    fragmentTransaction.commit();
+
+                    Toast.makeText(getActivity(), "Publicación eliminada de forma exitosa", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(getActivity(), "Ha ocurrido un error", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getActivity(), "Ha ocurrido un error elimiando la publicación", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void getCommentaryPublicationId(final String id, final Context context) {
