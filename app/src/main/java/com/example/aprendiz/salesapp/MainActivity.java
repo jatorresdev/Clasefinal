@@ -3,6 +3,8 @@ package com.example.aprendiz.salesapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,11 +12,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aprendiz.salesapp.fragments.LoginFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationCreate;
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     public String loggedInUserEmail;
     public String loggedInUserPassword;
     public String loggedInUserData;
+    final String TAG = this.getClass().getName();
 
     ImageView mUserImage;
     TextView mUserFullName;
@@ -115,13 +120,33 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    boolean twice = false;
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+            Log.d(TAG, "click");
+            if (twice == true){
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                System.exit(0);
+            }
+            twice = true;
+            Log.d(TAG, "twice" + twice);
+            Toast.makeText(MainActivity.this, "Presione atrás de nuevo para salir", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    twice = false;
+                    Log.d(TAG, "twice" + twice);
+                }
+            },4000);
         }
     }
 
