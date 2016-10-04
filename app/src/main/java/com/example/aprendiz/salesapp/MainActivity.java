@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aprendiz.salesapp.fragments.AboutFragment;
 import com.example.aprendiz.salesapp.fragments.LoginFragment;
 import com.example.aprendiz.salesapp.fragments.PublicationCreate;
 import com.example.aprendiz.salesapp.fragments.PublicationDetailFragment;
@@ -45,7 +44,8 @@ public class MainActivity extends AppCompatActivity
         RegisterCommentaryFragment.OnFragmentInteractionListener,
         UpdateCommentaryFragment.OnFragmentInteractionListener,
         PublicationUpdate.OnFragmentInteractionListener,
-        PublicationDetailFragment.OnFragmentInteractionListener {
+        PublicationDetailFragment.OnFragmentInteractionListener,
+        AboutFragment.OnFragmentInteractionListener {
 
     public String loggedInUserEmail;
     public String loggedInUserPassword;
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity
             toggle.syncState();
 
 
-
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
@@ -123,15 +122,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     boolean twice = false;
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
         } else {
 
-            Log.d(TAG, "click");
-            if (twice == true){
+            if (twice) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -139,17 +139,16 @@ public class MainActivity extends AppCompatActivity
                 finish();
                 System.exit(0);
             }
+
             twice = true;
-            Log.d(TAG, "twice" + twice);
             Toast.makeText(MainActivity.this, "Presione atrás de nuevo para salir", Toast.LENGTH_SHORT).show();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     twice = false;
-                    Log.d(TAG, "twice" + twice);
                 }
-            },4000);
-        }//super.onBackPressed();
+            }, 4000);
+        }
     }
 
     @Override
@@ -204,28 +203,31 @@ public class MainActivity extends AppCompatActivity
             fragment = new PublicationCreate();
             FragmentTransaction = true;
 
-      /*  } else if (id == R.id.nav_publications_update) {
-            fragment = new PublicationUpdate();
-            FragmentTransaction = true;*/
+        } else if (id == R.id.nav_about) {
+            fragment = new AboutFragment();
+            FragmentTransaction = true;
 
-        /*} else if (id == R.id.nav_commentary_create) {
+        }
+        /*else if (id == R.id.nav_publications_update) {
+            fragment = new PublicationUpdate();
+            FragmentTransaction = true;
+
+        } else if (id == R.id.nav_commentary_create) {
             fragment = new RegisterCommentaryFragment();
-            FragmentTransaction = true;*/
+            FragmentTransaction = true;
 
         } else if (id == R.id.nav_commentary_update) {
             fragment = new UpdateCommentaryFragment();
             FragmentTransaction = true;
-        }
+        }*/
 
         if (FragmentTransaction) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
-            //item.setChecked(true);
-
             getSupportActionBar().setTitle(item.getTitle());
 
         }
 
-       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return true;

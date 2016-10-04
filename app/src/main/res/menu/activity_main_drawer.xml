@@ -22,12 +22,12 @@
                 android:id="@+id/nav_commentary_create"
                 android:icon="@drawable/add_coment"
                 android:title="@string/nav.publication_addCommentary" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_commentary_update"-->
+                <!--android:icon="@drawable/edit_coment"-->
+                <!--android:title="@string/nav.publication_updateCommentary" />-->
             <item
-                android:id="@+id/nav_commentary_update"
-                android:icon="@drawable/edit_coment"
-                android:title="@string/nav.publication_updateCommentary" />
-            <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_about"
                 android:icon="@drawable/about"
                 android:title="About" />
                  </group>
