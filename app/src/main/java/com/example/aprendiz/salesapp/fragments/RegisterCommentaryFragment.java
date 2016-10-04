@@ -83,7 +83,7 @@ public class RegisterCommentaryFragment extends Fragment {
 
     public static RegisterCommentaryFragment newInstance(String idPublication) {
         RegisterCommentaryFragment fragment = new RegisterCommentaryFragment();
-        msidPublication=idPublication;
+        msidPublication = idPublication;
         Bundle args = new Bundle();
         args.putString(ARG_ID_PUBLICATION, idPublication);
         fragment.setArguments(args);
@@ -109,7 +109,6 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
         fragment.setArguments(args);
         return fragment;
     }*/
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,15 +124,15 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
                              Bundle savedInstanceState) {
         Log.d("Log", "onCreateView");
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_register_commentary, container, false);
+        View view = inflater.inflate(R.layout.fragment_register_commentary, container, false);
 
-       // EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
+        // EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
         //EtIdPublication.setText(msidPublication);
-        btnCancelCommentary=(Button)view.findViewById(R.id.cancelRegisterCommentary);
+        btnCancelCommentary = (Button) view.findViewById(R.id.cancelRegisterCommentary);
         btnCancelCommentary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity=getActivity();
+                activity = getActivity();
 
                 PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
@@ -143,21 +142,21 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
             }
         });
 
-            return  view;
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-     // EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
-        EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryMesage);
-        final Button btnComentar=(Button)view.findViewById(R.id.registerCommentary);
+        // EtIdPublication=(EditText)view.findViewById(R.id.commentaryIdPublication);
+        EtCommentaryMessage = (EditText) view.findViewById(R.id.commentaryMesage);
+        final Button btnComentar = (Button) view.findViewById(R.id.registerCommentary);
 
         btnComentar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(btnComentar.getWindowToken(), 0);
                 attemptRegister();
             }
@@ -199,7 +198,7 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -212,13 +211,13 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
 
     /*Logica del registro*/
 
-    private void attemptRegister(){
+    private void attemptRegister() {
 //        EtIdPublication.setError(null);
         EtCommentaryMessage.setError(null);
 
 
-        String idPublication=msidPublication;
-        String message=EtCommentaryMessage.getText().toString();
+        String idPublication = msidPublication;
+        String message = EtCommentaryMessage.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -254,7 +253,7 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
             // perform the user register attempt.
             clearFields();
             showProgress(true);
-            mRegisterTask = new CommentaryRegisterTask(idPublication,message);
+            mRegisterTask = new CommentaryRegisterTask(idPublication, message);
             mRegisterTask.registerCommentary();
         }
 
@@ -262,29 +261,9 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
     }
 
     private void clearFields() {
-       // EtIdPublication.setText("");
+        // EtIdPublication.setText("");
         EtCommentaryMessage.setText("");
 
-    }
-
-    private boolean isNameValid(String name) {
-        return name.length() > 4;
-    }
-
-    private boolean isLastNameValid(String lastName) {
-        return lastName.length() > 4;
-    }
-
-    private boolean isNumberValid(String number) {
-        return number.matches("\\d+(?:\\.\\d+)?") && number.length() <= 10;
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -330,19 +309,19 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
         private final String mIdPublication;
         private final String mMessage;
 
-        public CommentaryRegisterTask(String mIdPublication,String mMessage) {
+        public CommentaryRegisterTask(String mIdPublication, String mMessage) {
             this.mIdPublication = mIdPublication;
             this.mMessage = mMessage;
         }
 
 
         public void registerCommentary() {
-            Commentary commentary = new Commentary(mIdPublication,mMessage);
+            Commentary commentary = new Commentary(mIdPublication, mMessage);
 
 
             CommentaryService commentaryServices = SalesAPI.createService(CommentaryService.class,
                     ((MainActivity) getActivity()).loggedInUserEmail, ((MainActivity) getActivity()).loggedInUserPassword);
-            Call<ResponseBody> callCreateCommentary = commentaryServices.createCommentary(mIdPublication,mMessage);
+            Call<ResponseBody> callCreateCommentary = commentaryServices.createCommentary(mIdPublication, mMessage);
             callCreateCommentary.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -353,9 +332,9 @@ Es para agregar comentarios se debe relacionar el id de la publicacion*/
 
                         try {
                             CommentaryData commentaryDataResponse = gson.fromJson(response.body().string(), CommentaryData.class);
-                            Toast.makeText(getActivity(), "Comentario registrado exitosamente! "
-                                    + commentaryDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
-                            activity=getActivity();
+
+                            Toast.makeText(getActivity(), "Comentario registrado exitosamente!", Toast.LENGTH_LONG).show();
+                            activity = getActivity();
 
                             PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
                             FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();

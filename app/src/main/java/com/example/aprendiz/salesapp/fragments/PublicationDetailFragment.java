@@ -19,22 +19,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aprendiz.salesapp.MainActivity;
 import com.example.aprendiz.salesapp.R;
-import com.example.aprendiz.salesapp.adapters.PublicationRecyclerViewAdapter;
 import com.example.aprendiz.salesapp.clients.SalesAPI;
 import com.example.aprendiz.salesapp.models.Commentary;
-import com.example.aprendiz.salesapp.models.CommentaryData;
 import com.example.aprendiz.salesapp.models.CommentaryDataList;
 import com.example.aprendiz.salesapp.models.Publication;
 import com.example.aprendiz.salesapp.models.PublicationData;
-import com.example.aprendiz.salesapp.models.PublicationDataList;
 import com.example.aprendiz.salesapp.services.CommentaryService;
 import com.example.aprendiz.salesapp.services.PublicationService;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,11 +57,10 @@ public class PublicationDetailFragment extends Fragment {
     private TextView mCity;
     private TextView mDescription;
     private ImageView mPhoto;
-    private ListView  listVista;
-    Button tbnBacktoList,btnEdiPublication,btnAddCommentary;
-    //EnviarDatos EM;
+    private View mView;
+    private ListView listVista;
+    Button tbnBacktoList, btnEdiPublication, btnAddCommentary;
     Activity activity;
-
 
 
     private OnFragmentInteractionListener mListener;
@@ -91,11 +87,6 @@ public class PublicationDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-   /* public interface EnviarDatos {
-
-        public void enviarInformacion(String title);
-    }*/
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,57 +100,47 @@ public class PublicationDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view= inflater.inflate(R.layout.fragment_publication_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_publication_detail, container, false);
 
-        tbnBacktoList=(Button)view.findViewById(R.id.btnBack);
-        btnEdiPublication=(Button)view.findViewById(R.id.btnEditPublication);
-        btnAddCommentary=(Button)view.findViewById(R.id.btnNewCommentary);
-
-        //mTitle=(TextView)view.findViewById(R.id.edTitle);
+        tbnBacktoList = (Button) view.findViewById(R.id.btnBack);
+        btnEdiPublication = (Button) view.findViewById(R.id.btnEditPublication);
+        btnAddCommentary = (Button) view.findViewById(R.id.btnNewCommentary);
+        activity = getActivity();
 
 
         tbnBacktoList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity=getActivity();
-
-                PublicationFragment publicationFragment= new PublicationFragment();
+                PublicationFragment publicationFragment = new PublicationFragment();
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content_main, publicationFragment);
                 fragmentTransaction.commit();
             }
         });
+
         btnEdiPublication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity=getActivity();
-               // PublicationUpdate publicationUpdate=new PublicationUpdate();
                 PublicationUpdate publicationUpdate = PublicationUpdate.newInstance(idPublication);
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content_main, publicationUpdate);
                 fragmentTransaction.commit();
-
-
             }
         });
 
         btnAddCommentary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity=getActivity();
-
-                //RegisterCommentaryFragment registerCommentaryFragment = new RegisterCommentaryFragment();
                 RegisterCommentaryFragment registerCommentaryFragment = RegisterCommentaryFragment.newInstance(idPublication);
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content_main,registerCommentaryFragment );
+                fragmentTransaction.replace(R.id.content_main, registerCommentaryFragment);
                 fragmentTransaction.commit();
             }
 
         });
-
 
         return view;
     }
@@ -168,14 +149,15 @@ public class PublicationDetailFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mView = view;
         mTitle = (TextView) view.findViewById(R.id.title);
         mCity = (TextView) view.findViewById(R.id.city);
         mDescription = (TextView) view.findViewById(R.id.description);
         mPhoto = (ImageView) view.findViewById(R.id.image);
-        listVista=(ListView)view.findViewById(R.id.listCommentary);
+        listVista = (ListView) view.findViewById(R.id.listCommentary);
 
         getPublicationId(idPublication);
-        getCommentaryPublicationId(idPublication,view.getContext());
+        getCommentaryPublicationId(idPublication, view.getContext());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -228,6 +210,7 @@ public class PublicationDetailFragment extends Fragment {
             @Override
             public void onResponse(Call<PublicationData> call, Response<PublicationData> response) {
                 if (response.isSuccessful()) {
+                    String emailUser = ((MainActivity) getActivity()).loggedInUserEmail;
                     Publication publication = response.body().getData();
 
                     mTitle.setText(publication.getTitle());
@@ -238,6 +221,11 @@ public class PublicationDetailFragment extends Fragment {
                         Picasso.with(getContext())
                                 .load(publication.getPhoto())
                                 .into(mPhoto);
+                    }
+
+                    // Visibilidad de botones de acuerdo a permisos
+                    if (publication.getUser().getEmail().equals(emailUser)) {
+                        btnEdiPublication.setVisibility(mView.VISIBLE);
                     }
 
                 } else {
@@ -267,21 +255,17 @@ public class PublicationDetailFragment extends Fragment {
 
                         Commentary comentaryObj;
 
-                        ArrayList <Commentary> listado;
+                        ArrayList<Commentary> listado;
                         CommentaryDataList commentaryDataList = gson.fromJson(response.body().string(), CommentaryDataList.class);
                         List<Commentary> commentaries = commentaryDataList.getData();
                         List<String> datos = new ArrayList<String>();
-                        for (int i=0;i<commentaries.size();i++) {
+                        for (int i = 0; i < commentaries.size(); i++) {
 
-                            comentaryObj=commentaries.get(i);
-                            //listVista.setContentDescription(comentaryObj.getMessage());
-                            datos.add(i,comentaryObj.getMessage());
+                            comentaryObj = commentaries.get(i);
+                            datos.add(i, comentaryObj.getMessage());
                         }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_expandable_list_item_1,datos);
-
-                        /*listado=new ArrayList<Commentary>(commentaries);*/
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_expandable_list_item_1, datos);
                         listVista.setAdapter(adapter);
-
 
                         //recyclerView.setAdapter(new PublicationRecyclerViewAdapter(publications, mListener));
 

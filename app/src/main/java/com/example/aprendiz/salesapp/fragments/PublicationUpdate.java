@@ -26,7 +26,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aprendiz.salesapp.MainActivity;
@@ -60,7 +59,6 @@ public class PublicationUpdate extends Fragment {
     private UpdatePublicationTask mUpdatePublicationTask = null;
     private static final String ARG_ID_PUBLICATION = "idPublication";
 
-    private EditText mIdPublication;
     private EditText mTitle;
     private EditText mCity;
     private EditText mDescription;
@@ -88,7 +86,7 @@ public class PublicationUpdate extends Fragment {
 
     public static PublicationUpdate newInstance(String idPublication) {
         PublicationUpdate fragment = new PublicationUpdate();
-        msidPublication=idPublication;
+        msidPublication = idPublication;
         Bundle args = new Bundle();
         args.putString(ARG_ID_PUBLICATION, idPublication);
         fragment.setArguments(args);
@@ -105,12 +103,11 @@ public class PublicationUpdate extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_publication_update, container, false);
-       // mIdPublication=(EditText) view.findViewById(R.id.edIdPublication);
-        btnCancelUpdate=(Button)view.findViewById(R.id.btn_Cancelupdate_publication);
+        btnCancelUpdate = (Button) view.findViewById(R.id.btn_Cancelupdate_publication);
         btnCancelUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity=getActivity();
+                activity = getActivity();
 
                 PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
@@ -119,24 +116,18 @@ public class PublicationUpdate extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-        //mIdPublication.setText(msidPublication);
         getPublicationId(msidPublication);
-        return  view;
+        return view;
     }
-
-   /* public void recibir(String msg){
-        mTitle.setText(msg);
-    }*/
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //mIdPublication = (EditText) view.findViewById(R.id.edIdPublication);
+
         mTitle = (EditText) view.findViewById(R.id.edTitle);
         mCity = (EditText) view.findViewById(R.id.edCity);
         mDescription = (EditText) view.findViewById(R.id.edDescription);
         mPhoto = (ImageView) view.findViewById(R.id.image);
-
 
 
         Button mImageButton = (Button) view.findViewById(R.id.btn_image);
@@ -158,7 +149,7 @@ public class PublicationUpdate extends Fragment {
         btnUpdatePublication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(btnUpdatePublication.getWindowToken(), 0);
                 updatePublication();
             }
@@ -180,10 +171,9 @@ public class PublicationUpdate extends Fragment {
                 if (response.isSuccessful()) {
                     Publication publication = response.body().getData();
 
-     //               mIdPublication.setText(publication.getId());
                     mTitle.setText(publication.getTitle());
-                    mCity.setText( publication.getCity());
-                    mDescription.setText( publication.getDescription());
+                    mCity.setText(publication.getCity());
+                    mDescription.setText(publication.getDescription());
 
                     if (!publication.getPhoto().isEmpty()) {
                         Picasso.with(getContext())
@@ -250,12 +240,6 @@ public class PublicationUpdate extends Fragment {
 
         boolean cancel = false;
         View focusedView = null;
-
-        if (TextUtils.isEmpty(idPublication)) {
-            mIdPublication.setError(getString(R.string.publication_error_field_required));
-            focusedView = mIdPublication;
-            cancel = true;
-        }
 
         if (TextUtils.isEmpty(description)) {
             mDescription.setError(getString(R.string.publication_error_field_required));
@@ -353,7 +337,6 @@ public class PublicationUpdate extends Fragment {
     }
 
     private void clearFields() {
-        //mIdPublication.setText("");
         mTitle.setText("");
         mCity.setText("");
         mDescription.setText("");
@@ -404,20 +387,12 @@ public class PublicationUpdate extends Fragment {
                 @Override
                 public void onResponse(Call<PublicationData> call, Response<PublicationData> response) {
                     showProgress(false);
+                    goPublicationDetail();
+
                     if (response.isSuccessful()) {
-
                         Publication publication = response.body().getData();
-
-                        Toast.makeText(getActivity(), "Publicacion editada exitosamente! "
+                        Toast.makeText(getActivity(), "Publicacion editada exitosamente"
                                 + publication.getTitle(), Toast.LENGTH_LONG).show();
-
-                        activity=getActivity();
-                        // PublicationUpdate publicationUpdate=new PublicationUpdate();
-                        PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
-                        FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
-                        fragmentTransaction.commit();
 
                     } else {
                         mUpdatePublicationTask = null;
@@ -445,6 +420,16 @@ public class PublicationUpdate extends Fragment {
 
     private boolean shouldAskPermission() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    private void goPublicationDetail() {
+        activity = getActivity();
+
+        PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
+        FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
+        fragmentTransaction.commit();
     }
 
 }

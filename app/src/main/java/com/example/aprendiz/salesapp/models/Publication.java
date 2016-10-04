@@ -11,18 +11,14 @@ public class Publication {
     private String description;
     private String city;
     private String photo;
+    private User user;
 
-    @SerializedName("user_id")
-    private
-    Integer userId;
-
-    public Publication(String id, String title, String description, String city, String photo, Integer userId) {
+    public Publication(String id, String title, String description, String city, String photo) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.city = city;
         this.photo = photo;
-        this.userId = userId;
     }
 
     public String getId() {
@@ -65,11 +61,11 @@ public class Publication {
         this.photo = photo;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
