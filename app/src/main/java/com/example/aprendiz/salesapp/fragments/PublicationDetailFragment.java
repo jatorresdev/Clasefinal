@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -296,13 +297,30 @@ public class PublicationDetailFragment extends Fragment {
                         CommentaryDataList commentaryDataList = gson.fromJson(response.body().string(), CommentaryDataList.class);
                         List<Commentary> commentaries = commentaryDataList.getData();
                         List<String> datos = new ArrayList<String>();
+                        final List<String> datosid = new ArrayList<String>();
                         for (int i = 0; i < commentaries.size(); i++) {
 
                             comentaryObj = commentaries.get(i);
                             datos.add(i, comentaryObj.getMessage());
+                            datosid.add(i, comentaryObj.getId());
                         }
                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_expandable_list_item_1, datos);
                         listVista.setAdapter(adapter);
+
+                        listVista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                                String dataIdPublication=datosid.get(position);
+                                Toast.makeText(context,"id "+dataIdPublication,Toast.LENGTH_SHORT).show();
+
+                                UpdateCommentaryFragment updateCommentaryFragment = UpdateCommentaryFragment.newInstance(idPublication,dataIdPublication);
+                                FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.content_main, updateCommentaryFragment);
+                                fragmentTransaction.commit();
+                            }
+                        });
 
                         //recyclerView.setAdapter(new PublicationRecyclerViewAdapter(publications, mListener));
 

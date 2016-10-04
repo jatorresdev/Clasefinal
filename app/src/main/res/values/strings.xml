@@ -85,6 +85,7 @@
 
     <string name="register_commentary_idCommentary">Id Comentario</string>
     <string name="register.action_updateCommentary">Editar Comentario</string>
+    <string name="register.CancelAction_updateCommentary">Cancelar</string>
 
     <!--Errores en Registro de comentarios-->
 

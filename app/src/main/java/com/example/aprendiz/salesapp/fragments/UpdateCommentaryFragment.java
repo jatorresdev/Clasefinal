@@ -3,12 +3,16 @@ package com.example.aprendiz.salesapp.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +49,7 @@ import retrofit2.Response;
 public class UpdateCommentaryFragment extends Fragment {
 
     private CommentaryUpdateTask mRegisterTask = null;
-
+    private static final String ARG_ID_PUBLICATION = "idPublication";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
    // private static final String ARG_PARAM1 = "param1";
@@ -64,11 +68,27 @@ public class UpdateCommentaryFragment extends Fragment {
     private View mProgressView;
     private View mRegisterFormView;
 
+    private static String msidPublication;
+    private static String msidComentary;
+
+    private Button btnCancelUpdateCommentary;
+
+    Activity activity;
 
     private OnFragmentInteractionListener mListener;
 
     public UpdateCommentaryFragment() {
         // Required empty public constructor
+    }
+
+    public static UpdateCommentaryFragment newInstance(String idPublication,String idCommentary) {
+        UpdateCommentaryFragment fragment = new UpdateCommentaryFragment();
+        msidPublication=idPublication;
+        msidComentary=idCommentary;
+        Bundle args = new Bundle();
+        args.putString(ARG_ID_PUBLICATION, idPublication);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     /**
@@ -104,7 +124,27 @@ public class UpdateCommentaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d("Log", "onCreateView");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_update_commentary, container, false);
+        View view=inflater.inflate(R.layout.fragment_update_commentary, container, false);
+        EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
+        EtIdPublication.setText(msidPublication);
+        EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
+        EtIdCommentary.setText(msidComentary);
+
+        btnCancelUpdateCommentary=(Button)view.findViewById(R.id.CancelUpdateCommentary);
+        btnCancelUpdateCommentary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity=getActivity();
+
+                PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
+                FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
+                fragmentTransaction.commit();
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -313,6 +353,14 @@ public class UpdateCommentaryFragment extends Fragment {
                         CommentaryData commentaryDataResponse = gson.fromJson(response.body().string(), CommentaryData.class);
                         Toast.makeText(getActivity(), "Comentario editado exitosamente! "
                                 + commentaryDataResponse.getData().getFullName(), Toast.LENGTH_LONG).show();
+
+                        activity = getActivity();
+
+                        PublicationDetailFragment publicationDetailFragment = PublicationDetailFragment.newInstance(msidPublication);
+                        FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.content_main, publicationDetailFragment);
+                        fragmentTransaction.commit();
 
                     } catch (IOException e) {
                         Toast.makeText(getActivity(), "Ha ocurrido un error al intentar realizar el registro", Toast.LENGTH_LONG).show();
