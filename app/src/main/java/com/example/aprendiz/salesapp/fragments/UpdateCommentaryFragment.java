@@ -70,6 +70,7 @@ public class UpdateCommentaryFragment extends Fragment {
 
     private static String msidPublication;
     private static String msidComentary;
+    private static String msMessage;
 
     private Button btnCancelUpdateCommentary;
 
@@ -81,10 +82,11 @@ public class UpdateCommentaryFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static UpdateCommentaryFragment newInstance(String idPublication,String idCommentary) {
+    public static UpdateCommentaryFragment newInstance(String idPublication,String idCommentary,String Message) {
         UpdateCommentaryFragment fragment = new UpdateCommentaryFragment();
         msidPublication=idPublication;
         msidComentary=idCommentary;
+        msMessage=Message;
         Bundle args = new Bundle();
         args.putString(ARG_ID_PUBLICATION, idPublication);
         fragment.setArguments(args);
@@ -125,10 +127,12 @@ public class UpdateCommentaryFragment extends Fragment {
         Log.d("Log", "onCreateView");
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_update_commentary, container, false);
-        EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
-        EtIdPublication.setText(msidPublication);
-        EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
-        EtIdCommentary.setText(msidComentary);
+        //EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
+        //EtIdPublication.setText(msidPublication);
+        //EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
+        //EtIdCommentary.setText(msidComentary);
+        EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryEtMesage);
+        EtCommentaryMessage.setText(msMessage);
 
         btnCancelUpdateCommentary=(Button)view.findViewById(R.id.CancelUpdateCommentary);
         btnCancelUpdateCommentary.setOnClickListener(new View.OnClickListener() {
@@ -158,8 +162,8 @@ public class UpdateCommentaryFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-       EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
-         EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
+       //EtIdPublication=(EditText)view.findViewById(R.id.commentaryEtIdPublication);
+         //EtIdCommentary=(EditText)view.findViewById(R.id.commentaryEtIdCommentary);
          EtCommentaryMessage=(EditText)view.findViewById(R.id.commentaryEtMesage);
         final Button btnEditarComentar=(Button)view.findViewById(R.id.updateCommentary);
 
@@ -211,12 +215,12 @@ public class UpdateCommentaryFragment extends Fragment {
     }
 
     private void attemptRegister(){
-        EtIdPublication.setError(null);
-        EtIdCommentary.setError(null);
+        //EtIdPublication.setError(null);
+        //EtIdCommentary.setError(null);
         EtCommentaryMessage.setError(null);
 
-        String idPublication= EtIdPublication.getText().toString();
-        String idCommentary=EtIdCommentary.getText().toString();
+        String idPublication= msidPublication;
+        String idCommentary=msidComentary;
         String message=EtCommentaryMessage.getText().toString();
 
         boolean cancel = false;
@@ -259,9 +263,9 @@ public class UpdateCommentaryFragment extends Fragment {
     }
 
     private void clearFields() {
-        EtIdPublication.setText("");
+        //EtIdPublication.setText("");
         EtCommentaryMessage.setText("");
-        EtIdCommentary.setText("");
+        //EtIdCommentary.setText("");
     }
 
     private boolean isNameValid(String name) {

@@ -296,7 +296,7 @@ public class PublicationDetailFragment extends Fragment {
                         ArrayList<Commentary> listado;
                         CommentaryDataList commentaryDataList = gson.fromJson(response.body().string(), CommentaryDataList.class);
                         List<Commentary> commentaries = commentaryDataList.getData();
-                        List<String> datos = new ArrayList<String>();
+                        final List<String> datos = new ArrayList<String>();
                         final List<String> datosid = new ArrayList<String>();
                         for (int i = 0; i < commentaries.size(); i++) {
 
@@ -312,9 +312,10 @@ public class PublicationDetailFragment extends Fragment {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                                 String dataIdPublication=datosid.get(position);
+                                String dataMessage=datos.get(position);
                                 Toast.makeText(context,"id "+dataIdPublication,Toast.LENGTH_SHORT).show();
 
-                                UpdateCommentaryFragment updateCommentaryFragment = UpdateCommentaryFragment.newInstance(idPublication,dataIdPublication);
+                                UpdateCommentaryFragment updateCommentaryFragment = UpdateCommentaryFragment.newInstance(idPublication,dataIdPublication,dataMessage);
                                 FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                 fragmentTransaction.replace(R.id.content_main, updateCommentaryFragment);
