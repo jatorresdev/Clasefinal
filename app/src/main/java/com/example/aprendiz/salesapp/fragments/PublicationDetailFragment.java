@@ -327,7 +327,6 @@ public class PublicationDetailFragment extends Fragment {
                             }
                         });
 
-                        //recyclerView.setAdapter(new PublicationRecyclerViewAdapter(publications, mListener));
 
                     } catch (IOException e) {
                         Toast.makeText(getActivity(), "Ha ocurrido un error obteniendo las publicaciones", Toast.LENGTH_LONG).show();
