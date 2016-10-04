@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity
             drawer.setDrawerListener(toggle);
             toggle.syncState();
 
+
+
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
@@ -127,7 +129,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //super.onBackPressed();
+
             Log.d(TAG, "click");
             if (twice == true){
                 Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -147,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "twice" + twice);
                 }
             },4000);
-        }
+        }//super.onBackPressed();
     }
 
     @Override
@@ -217,7 +219,8 @@ public class MainActivity extends AppCompatActivity
 
         if (FragmentTransaction) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
-            item.setChecked(true);
+            //item.setChecked(true);
+
             getSupportActionBar().setTitle(item.getTitle());
 
         }
